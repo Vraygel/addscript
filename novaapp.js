@@ -51,44 +51,64 @@ for (const iterator of dinamic_div_hide) { // для всех кнопок "ск
 }
 
 myTxtArea.addEventListener('input', (event) => { // текст из myTxtArea транслируется в myTxtArea_div
-	console.log(myTxtArea.value);
-	myTxtArea_div.textContent = myTxtArea.value
+	myTxtArea_div.innerHTML = `<p class='myTxtArea_div_p'>${myTxtArea.value}</p>`
 })
 
-insertDinamic.addEventListener('click', (event) => { // кнопка "вставить динамичекое поле" событие клик
+insertDinamic.addEventListener('click', (event) => insertDinamicClick(event)) // кнопка "вставить динамичекое поле" событие клик
+
+
+function insertDinamicClick(event) {
 	event.preventDefault()
 	dinamic_div_prog.style.display = 'block'
-})
+	dinamicListFunc('dinamic_add', 'Добавить') // запускаем отображение списка динамических полей с кнопкой "Добавить"
+	dinamicAddClick() // добавление динамического поля в текст 
 
+}
 
+function dinamicAddClick() { // добавление динамического поля в текст 
+	let dinamic_add = document.querySelectorAll('.dinamic_add') // ищем все кнопки "Добавить"
 
+	for (const iterator of dinamic_add) { // для каждой кнопки
 
+		iterator.addEventListener('click', (e) => { // событие клик
 
+			e.preventDefault()
+			let id = iterator.getAttribute('id') // получаем id кнопки
+			let input = iterator.closest('.dinamic_list_item').querySelector('input') // ищем соседний input (в родителе)
+			let name = input.getAttribute('name') // получаем значение атрибута name найденного input
+			let placeholder = input.getAttribute('placeholder')  // получаем значение атрибута placeholder найденного input
+			let temp = document.createElement('input') // создаем новый input
+			temp.classList.add('dinamic_input') // устанавливаем класс
+			temp.setAttribute('id', id) // устанавливаем значение атрубута id
+			temp.setAttribute('name', name) // устанавливаем значение атрубута name
+			temp.setAttribute('placeholder', placeholder) // устанавливаем значение атрубута placeholder
 
+			try {
+				var range = window.getSelection().getRangeAt(0);
+				console.log(range);
+			} catch (err) {
+				console.log(err);
+				alert('Выберите место для вставки')
+			}
 
-
-
-
-
-list_buttonClick()
+			if (range.startContainer.parentNode.classList.contains('myTxtArea_div_p')) {
+				range.extractContents();
+				range.insertNode(temp);
+				dinamic_list.innerHTML = ''
+			} else {
+				alert('Выберите место для вставки')
+			}
+		})
+	}
+}
 
 addDinamic.addEventListener('click', (event) => addDinamicClick()) // кнопка "добавить динамичекое поле" событие клик
-
-
-
-
-
 
 function addDinamicClick() {
 	dinamic_div.style.display = 'block' // контейнер динимических полей добавление
 
 	dinamicListFunc('dinamic_dell', 'Удалить') // отображение списка динамических полей с кнопкой "удалить" динамическое поле
 }
-
-
-
-
-
 
 function dinamicListFunc(buttonClass, buttonValue) { // отображение списка динамических полей 
 
@@ -129,7 +149,7 @@ function dinamicListFunc(buttonClass, buttonValue) { // отображение �
 dinamic_save.addEventListener('click', () => dinamic_saveClick()) // кнопка "Сохранить" Динамическое поле событие "Клик"
 
 function dinamic_saveClick() {
-	
+
 	let dinamicListObj = {} // объект содержащий информацию о динамическом поле
 	let id = getId(length = 16) // генерация случайного номера ID
 
@@ -148,8 +168,8 @@ function dinamic_saveClick() {
 	name.value = '' // очищаем input name
 	placeholder.value = '' // очищаем input placeholder
 
-	dinamicListFunc('dinamic_dell', 'Удалить')
-	dinamicDellFunc()
+	dinamicListFunc('dinamic_dell', 'Удалить') // запускаем отображение списка динамических полей с кнопкой удалить
+	dinamicDellFunc() // запускаем функцию удаления динамичеого поля
 }
 
 
