@@ -1,0 +1,107 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	/* outline: solid red; */
+}
+
+body,
+.wrapper_programming,
+.wrapper_work, .wrapper_list {
+	padding: 5px;
+}
+
+.wrapper_work, .wrapper_list, .dinamic_div{
+	display: none;
+}
+
+
+
+.wrap_color {
+	display: inline;
+	position: relative;
+}
+
+.mce-container {
+	position: absolute;
+	top: 25px;
+	left: 0px;
+	z-index: 20;
+	border: 1px solid #d6d6d6;
+	display: none;
+}
+
+.mce-grid {
+	border-spacing: 2px;
+	border-collapse: separate;
+}
+
+.mce-colorbutton-grid {
+	margin: 4px;
+}
+
+.mce-grid td.mce-grid-cell div {
+	padding: 0px;
+	border: 1px solid #d6d6d6;
+	width: 15px;
+	height: 15px;
+	margin: 0;
+	cursor: pointer;
+}
+
+.mini_but_color {
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	padding-block: 0px;
+	padding-inline: 0px;
+	border-width: 0px;
+}
+
+.wrapper_editing {
+	border: solid 2px blue;
+}
+
+.myTxtArea,
+.myTxtArea_div{
+	width: 98vw;
+	/* height: 20vh;
+	height: auto; */
+	padding: 5px;
+	margin-top: 5px;
+	font-size: 16px;
+	font-family: monospace;
+
+	border: solid 2px red;
+}
+
+.dinamic_div_hide {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
+.dinamic_div, .dinamic_div_prog {
+	height: auto;
+	border: solid 1px black;
+	display: none;
+	position: relative;
+	padding: 5px;
+	margin-top: 5px;
+	font-size: 16px;
+	font-family: monospace;
+	border: solid 2px red;
+}
+
+
+.menu button, .wrapper_editing button{
+	padding: 2px;
+}
+
+.wrapper_list{
+	/* display: ; */
+	justify-content: space-between
+}
+
+
+

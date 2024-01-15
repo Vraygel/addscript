@@ -1,0 +1,50 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	/* outline: solid red; */
+}
+
+
+
+.p_answer_false, .p_answer_work{
+	cursor: pointer;
+}
+
+.wrapwork{
+	/* width: 300px; */
+	/* height: 200px; */
+	padding: 5px;
+	overflow: auto;
+	border: solid 1px black;
+}
+
+.wrap_p_work{
+	min-height: 100vw;
+}
+
+.wrap_p_work_prev{
+	opacity: 0.3;
+}
+
+.menu{
+	border: solid 1px black;
+	padding: 5px;
+	background-color: cadetblue;
+	position: fixed;
+	right: 0px;
+	left: 0px;
+	z-index: 10;
+}
+
+.displayAnswer_button, .programming_button{
+	padding: 5px;
+	border-radius: 8px;
+	border-width: 1.5px;
+	cursor: pointer;
+}
+
+.addquestionList_item{
+	cursor: pointer;
+	margin-bottom: 5px;
+}

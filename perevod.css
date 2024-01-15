@@ -1,0 +1,121 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	/* outline: solid red; */
+}
+body{
+	padding: 5px;
+	padding-top: 10px;
+}
+
+.intLink{
+	cursor: pointer;
+	padding: 2px;
+}
+
+
+.myTxtArea, .myTxtArea_div, .dinamic_div{
+	width: 98vw;
+	height: 25vh;
+	padding: 5px;
+	margin-top: 5px;
+	font-size: 16px;
+	font-family: monospace;
+}
+
+.dinamic_div{
+	height: auto;
+	border: solid 1px black;
+	display: none;
+	position: relative;
+}
+
+
+.dinamic_div_hide{
+position: absolute;
+right: 5px;
+top: 5px;
+}
+
+.dinamic_list_item{
+	margin-top: 10px;
+}
+
+.myTxtArea{
+	/* position: relative; */
+	/* z-index: 0; */
+	/* position: absolute; */
+	/* top: 10; */
+}
+
+.wrapper{
+	position: relative;
+	margin-top: 50px;
+}
+
+
+.mini_but_color{
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	padding-block: 0px;
+  padding-inline: 0px;
+  border-width: 0px;
+}
+
+.myTxtArea_div{
+	border-color: blue;
+	border: solid 5px red;
+	position: relative;
+	z-index: 10;
+}
+
+.input_color{
+	inline-size: 50px ;
+  block-size: 19px;
+	border-width: 0px;
+	cursor: pointer;
+	
+}
+
+.mce-grid {
+	border-spacing: 2px;
+	border-collapse: separate;
+}
+
+.mce-colorbutton-grid {
+	margin: 4px;
+}
+
+.mce-grid td.mce-grid-cell div {
+	padding: 0px;
+	border: 1px solid #d6d6d6;
+	width: 15px;
+	height: 15px;
+	margin: 0;
+	cursor: pointer;
+}
+
+.wrap_color{
+	display: inline;
+	position: relative;
+}
+
+.mce-container{
+	position: absolute;
+	top: 25px;
+	left: 0px;
+	z-index: 20;
+	border: 1px solid #d6d6d6;
+	display: none;
+}
+
+.mce-colorbtn-trans div {
+	text-align: center;
+	vertical-align: middle;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 16px;
+	color: #707070;
+}
