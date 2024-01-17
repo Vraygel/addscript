@@ -97,9 +97,6 @@ function programming_buttonClick() {
 
 						}
 
-
-
-
 					for (const key in iterator.answer_all) {
 						if (key == id) {
 							answerQuestionAdd(iterator.answer_all[key].answer, id, text)

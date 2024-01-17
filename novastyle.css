@@ -105,3 +105,15 @@ body,
 
 
 
+.questionList_item, .p_answer_noEnd_false{
+	cursor: pointer;
+	margin-bottom: 5px;
+}
+
+/* .wrapper_button_questionList_item{
+	display: none;
+} */
+
+.show{
+	display: block;
+}
