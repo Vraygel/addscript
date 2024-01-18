@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- <link rel="stylesheet" href="style.css"> -->
 	<!-- <link rel="stylesheet" href="perevod.css"> -->
+	<script src="/anseki-leader-line-6c26a9d/leader-line.min.js"></script>
 	<link rel="stylesheet" href="novastyle.css">
 	<title>Скрипт</title>
 </head>
@@ -23,7 +24,31 @@
 			<div class="wrapper_editing">
 		
 				<form name="myForm">
-					<h2 class="myForm_h2">Стартовый вопрос</h2>
+					<div class="wrapper_head">
+						<h2 class="myForm_h2">Стартовый вопрос</h2>
+						<!-- <p class="head_p">Изменить ответ на который будет задан этот вопрос</p>
+						<div class="wrapper_false_answers_head">
+							<h2>Список ответов без начала</h2>
+							<div class="answers_false_beginning">
+								<p>Первый вопрос</p>
+								<p>второй вопрос</p>
+								<p>и тд</p>
+							</div>
+						</div> -->
+
+
+
+
+						<!-- <div class="wrapper_answers_head">
+							<h2>Список ответов</h2>
+							<div class="answers_head">
+								<p>Первый вопрос</p>
+								<p>второй вопрос</p>
+								<p>и тд</p>
+							</div>
+						</div> -->
+					</div>
+					
 					<button class="intLink format_strong" id="format-strong"><strong>Жирный</strong></button>
 					<button class="intLink format_em" id="format-em"><em>Курсив</em></button>
 					<div class="wrap_color">
@@ -314,14 +339,28 @@
 
 		<div class="wrapper_list">
 			
-			<div class="wrapper_questions">
-				<h2>Список вопросов</h2>
-				<div class="questions">
-					<p>Первый вопрос</p>
-					<p>второй вопрос</p>
-					<p>и тд</p>
+			<div class="wrapper_questions_answers">
+				<div class="wrapper_questions">
+					<h2>Список вопросов</h2>
+					<div class="questions">
+						<p>Первый вопрос</p>
+						<p>второй вопрос</p>
+						<p>и тд</p>
+					</div>
 				</div>
+				<div class="wrapper_answers">
+					<h2>Список ответов</h2>
+					<div class="answers">
+						<p>Первый вопрос</p>
+						<p>второй вопрос</p>
+						<p>и тд</p>
+					</div>
+				</div>
+
 			</div>
+				
+
+
 
 			<div class="wrapper_answers_false">
 				<h2>Список ответов без продолжения</h2>
@@ -332,14 +371,14 @@
 				</div>
 			</div>
 
-			<div class="wrapper_false_answers">
+			<!-- <div class="wrapper_false_answers">
 				<h2>Список ответов без начала</h2>
 				<div class="answers_false_beginning">
 					<p>Первый вопрос</p>
 					<p>второй вопрос</p>
 					<p>и тд</p>
 				</div>
-			</div>
+			</div> -->
 
 			
 

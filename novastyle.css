@@ -108,6 +108,9 @@ body,
 .questionList_item, .p_answer_noEnd_false{
 	cursor: pointer;
 	margin-bottom: 5px;
+	/* display: inline;
+	width: auto; */
+	text-align: right;
 }
 
 /* .wrapper_button_questionList_item{
@@ -116,4 +119,27 @@ body,
 
 .show{
 	display: block;
+}
+
+.wrapper_AnswerAll{
+	margin-bottom: 10px;
+}
+
+.wrapper_questionList_item{
+	/* width: auto; */
+}
+
+.head_p{
+	padding: 5px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+.p_answer_noBeginning_falsehead{
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
+.wrapper_false_answers_head{
+	display: none;
 }

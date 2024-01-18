@@ -21,11 +21,112 @@ let wrapanswer = document.querySelector('.wrapanswer') // контейнер о�
 let answers_false = document.querySelector('.answers_false') //контейнер ответов без продолжения
 let myForm_h2 = document.querySelector('.myForm_h2') // заголовок редактирования вопроса (сам вопрос)
 let answers_false_beginning = document.querySelector('.answers_false_beginning') // контейнер ответов без начала
+let answers = document.querySelector('.answers') // контейнер всех ответов на странице вопросов и ответов
+let answers_head = document.querySelector('.answers_head') // контейнер всех ответов на странице програмирования скрипта
+let wrapper_false_answers_head = document.querySelector('.wrapper_false_answers_head') // контейнер контейнера всех ответов на странице програмирования скрипта
 
+
+
+let head_p = document.querySelector('.head_p') // кнопка изменения головного ответа для вопроса
 
 let question_answer = [] // массив содержащий все объекты вопросов и ответов
 let dinamicListArr = [] // массив содержащий все объекты динамических полей
 let answerNoBeginning = [] // массив объектов вопросы без начала
+
+
+
+// head_p.addEventListener('click', (event) =>{
+// 	// answerDisplay(answers_head, 'head') // отображение всех ответов
+// 	displayingListAnswerNobeginning('head')
+// 	wrapper_false_answers_head.style.display = 'block' // показываем контейнер контейнера всех ответов на странице програмирования скрипта
+// 	let p_answer_noBeginning_falsehead = document.querySelectorAll('.p_answer_noBeginning_falsehead') // ищем все ответы на странице
+// 	for (const iterator of p_answer_noBeginning_falsehead) {
+// 		iterator.addEventListener('click', (event) =>{
+// 			let id = iterator.getAttribute('id')
+// 			console.log(id);
+// 			myTxtArea.setAttribute('id', id)
+		
+// 		})
+// 	}
+	
+
+// 	})
+
+
+// canvasAdd()
+
+function canvasAdd() { // рисование стрелок
+	let questionList_item = document.querySelectorAll('.questionList_item') // все параграфы всех вопросов
+	let p_answer_all = document.querySelectorAll('.p_answer_all') // все параграфы  всех ответов
+
+	questionList_item.forEach(ques => {
+		// console.log(ques);
+		let idQest = ques.getAttribute('id')
+		p_answer_all.forEach(answer => {
+			// console.log(answer);
+			let idAnswer = answer.getAttribute('id')
+			let idQuestion = answer.getAttribute('idQuestion')
+			if (idQest == idAnswer) {
+					new LeaderLine(
+						answer, ques, {color: '#00bcd4', size: 4, outlineColor: 'red', outline: true}
+						// startSocket: 'top', endSocket: 'bottom'
+					);
+									
+			}
+			if (idQuestion == idQest) {
+				new LeaderLine(
+					ques, answer, {color: '#f0bad4', size: 4,	outlineColor: 'red', outline: true}
+				);
+								
+		}
+		});
+
+
+
+
+
+
+	});
+
+	
+
+}
+
+
+function answerDisplay(item = answers, cl = '') { // отображение всех ответов
+	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer
+	item.innerHTML = ''
+	// let result = question_answer.find(function(item, index, array) {
+	// 	return item.id == id
+	// });
+	
+	for (const iterator of question_answer) {
+		
+		for (const key in iterator.answer_all) {
+			let id = key
+			let status = iterator.answer_all[key].answer_status
+			let text = iterator.answer_all[key].answer
+			let idQuestion = iterator.answer_all[key].idQuestion
+			item.innerHTML += `
+				<div class="wrapper_AnswerAll">
+					<p class="p_answer_all${cl}" status="${status}" id="${id}" idQuestion="${idQuestion}">${text}</p>
+				</div>
+			`
+		}
+	}
+
+	// <span></span>
+
+
+
+}
+
+
+
+ 
+
+
+
 
 programming_button.addEventListener('click', () => programming_buttonClick()) // кнопка "програмирование скрита" событие клик
 
@@ -33,9 +134,12 @@ function programming_buttonClick() { // кнопка "програмирован
 	wrapper_programming.style.display = 'block'
 	wrapper_work.style.display = 'none'
 	wrapper_list.style.display = 'none'
+	lineRemove() // удаление стрелок
 }
 
 list_button.addEventListener('click', () => list_buttonClick()) // кнопка "вопросы и ответы" событие клик
+
+// list_buttonClick()
 
 function list_buttonClick() { // кнопка "вопросы и ответы" событие клик
 	wrapper_list.style.display = 'flex'
@@ -45,7 +149,16 @@ function list_buttonClick() { // кнопка "вопросы и ответы" �
 	displayingListQuestions(question_answer) // вывод на экран списка всех вопросов
 	questionList_itemClick() // событие клик по вопросу из списка вопросов
 	displayingListAnswerNoEnd(question_answer) // отображение списка ответов без продолжения
-	displayingListAnswerNobeginning() // отображение списка ответов без начала
+	// displayingListAnswerNobeginning() // отображение списка ответов без начала
+	answerDisplay() // отображение всех ответов
+	canvasAdd() // рисуем стрелки
+}
+
+function lineRemove() { // удаление всех стрелок
+	let leaderLine = document.querySelectorAll('.leader-line') // все стрелки
+	for (const iterator of leaderLine) {
+		iterator.remove()
+	}
 }
 
 function displayingListAnswerNoEnd(question_answer) { // отображение списка ответов без продолжения
@@ -166,32 +279,27 @@ function addquestionList_itemDelete(id) { // запускаем функцию �
 	question_answerArrInlocalStorage() // получаем массив вопросов-ответов
 
 	let result = question_answer.find(function(item, index, array) {
-		// console.log(item);
-		
 		if (item.id == id) {
 			array.splice(index, 1)
 			return item.id == id
 		}
-		
-		
+
 	});
 
-	for (const key in result.answer_all) {
-		let temp = {}
-		temp[key] = result.answer_all[key]
-		result.answer_all[key].beginning = false
-		answerNoBeginning.push(temp)
-		let json = JSON.stringify(answerNoBeginning)
-		localStorage.setItem('answerNoBeginning', json)
-	}
+	// for (const key in result.answer_all) {
+	// 	let temp = {}
+	// 	temp[key] = result.answer_all[key]
+	// 	result.answer_all[key].beginning = false
+	// 	answerNoBeginning.push(temp)
+	// 	let json = JSON.stringify(answerNoBeginning)
+	// 	localStorage.setItem('answerNoBeginning', json)
+	// }
 
 	question_answer.forEach((item) => {
-	
 		for (const key in item.answer_all) {
 			let id = key
 			if (id == result.id) {
 				item.answer_all[key].answer_status = false
-
 			}
 		}
 	})
@@ -202,49 +310,52 @@ function addquestionList_itemDelete(id) { // запускаем функцию �
 }
 
 
-function displayingListAnswerNobeginning() { // отображения списка ответов без начала
-	question_answerArrInlocalStorage() // получаем массив вопросов-ответов
-	answers_false_beginning.innerHTML = '' // очищаем контейнер ответов без начала
-	if (localStorage.getItem('answerNoBeginning')) {
-		let json = localStorage.getItem('answerNoBeginning')
-		answerNoBeginning = JSON.parse(json)
-	}
-	answers_false_beginning.innerHTML = ''
-	console.log(answerNoBeginning);
-	for (const iterator of answerNoBeginning) {
-		console.log(iterator);
-		for (const key in iterator) {
-			console.log(iterator[key]);
-			console.log(key);
-			let id = key
-			let status = iterator[key].answer_status
-			let text = iterator[key].answer
-				answers_false_beginning.innerHTML += `
-					<div class="wrapper_AnswerNoBeginning">
-							<p class="p_answer_noBeginning_false" status="${status}" id="${id}">${text}</p>
-					</div>
-					`
-		}
-	}
+// function displayingListAnswerNobeginning(cl = '') { // отображения списка ответов без начала
+
+
+
+// 	question_answerArrInlocalStorage() // получаем массив вопросов-ответов
+// 	answers_false_beginning.innerHTML = '' // очищаем контейнер ответов без начала
+// 	if (localStorage.getItem('answerNoBeginning')) {
+// 		let json = localStorage.getItem('answerNoBeginning')
+// 		answerNoBeginning = JSON.parse(json)
+// 	}
+// 	answers_false_beginning.innerHTML = ''
+// 	// console.log(answerNoBeginning);
+// 	for (const iterator of answerNoBeginning) {
+// 		// console.log(iterator);
+// 		for (const key in iterator) {
+// 			// console.log(iterator[key]);
+// 			// console.log(key);
+// 			let id = key
+// 			let status = iterator[key].answer_status
+// 			let text = iterator[key].answer
+// 				answers_false_beginning.innerHTML += `
+// 					<div class="wrapper_AnswerNoBeginning">
+// 							<p class="p_answer_noBeginning_false${cl}" status="${status}" id="${id}">${text}</p>
+// 					</div>
+// 					`
+// 		}
+// 	}
 
 
 
 	
-	// question_answer.forEach((item) => {
-	// 	for (const key in item.answer_all) {
-	// 		// console.log(item.answer_all[key].beginning);
-	// 		let status = item.answer_all[key].beginning
-	// 		// debugger
-	// 		let id = key
-	// 		if (status == false) {
+// 	// question_answer.forEach((item) => {
+// 	// 	for (const key in item.answer_all) {
+// 	// 		// console.log(item.answer_all[key].beginning);
+// 	// 		let status = item.answer_all[key].beginning
+// 	// 		// debugger
+// 	// 		let id = key
+// 	// 		if (status == false) {
 				
-	// 		}
-	// 	}
-	// })
+// 	// 		}
+// 	// 	}
+// 	// })
 
 
 
-}
+// }
 
 
 
@@ -347,6 +458,7 @@ function work_buttonClick() { // кнопка "Показать скрипт" с
 	wrapper_work.style.display = 'block'
 	wrapper_list.style.display = 'none'
 	wrapper_programming.style.display = 'none'
+	lineRemove() // удаление кнопок
 }
 
 for (const iterator of dinamic_div_hide) { // для всех кнопок "скрыть" динамичекое поле
@@ -616,8 +728,13 @@ function addQuestionArr(id, question) { // добавление нового о�
 	let answer = document.querySelectorAll('.answer') // ищем все текстареа ответов
 	let myTxtArea_div = document.querySelector('.myTxtArea_div') // ищем myTxtArea_div (визуальное оформление вопроса)
 
+
+	console.log(question);
+	let idQuestion = question.getAttribute('id') // получаем Id самого вопроса
+
+
 	let arr = {} // новый объект вопроса-ответа
-	arr.id = id // устанавливаем id нового объект вопроса-ответа равным id заданного вопроса
+	arr.id = id // устанавливаем id нового объект вопроса-ответа равным id ответа на который задаем вопрос
 	arr.question = question.value // текст вопроса
 	arr.questionHTML = myTxtArea_div.innerHTML // HTML версия этого вопроса (визуальное оформление вопроса)
 	arr.answer_all = {} // новый объект ответов
@@ -636,6 +753,7 @@ function addQuestionArr(id, question) { // добавление нового о�
 			arr.answer_all[id] = {} // в объект answer_all создаем новый ключ равный id ответа и создаем в нем новый объект конкретного ответа 
 			arr.answer_all[id].answer = iterator.value // в объекте нового вопроса указываем текст ответа
 			arr.answer_all[id].answer_status = status // в объекте нового вопроса указываем status этого ответа
+			arr.answer_all[id].idQuestion = idQuestion // id вопроса на который дали этот ответ
 		}
 	}
 	question_answerArrInlocalStorage() // получаем сохраненный в localStorage массива question_answer 
@@ -686,6 +804,9 @@ function dinamicListArrInlocalStorage() { // проверяем существо
 	}
 }
 
+question_answerArrInlocalStorage()
+console.log(question_answer);
+
 function question_answerArrInlocalStorage() { // проверяем существование сохраненного в localStorage массива question_answer
 
 	if (localStorage.getItem('question_answer')) {// если есть сохраненный question_answer
@@ -717,4 +838,5 @@ function getId(length = 16) { // генерация случайного ном�
 }
 
 
-localStorage.clear()
+// localStorage.clear()
+
