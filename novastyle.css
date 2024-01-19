@@ -80,6 +80,9 @@ body,
 	right: 5px;
 	top: 5px;
 }
+.draggable {
+	cursor: move;
+}
 
 .dinamic_div, .dinamic_div_prog {
 	height: auto;
@@ -93,6 +96,10 @@ body,
 	border: solid 2px red;
 }
 
+.edit_questionList_item, .delete_questionList_item{
+	/* border: solid 1px gray; */
+	cursor: pointer;
+}
 
 .menu button, .wrapper_editing button{
 	padding: 2px;
@@ -103,15 +110,26 @@ body,
 	justify-content: space-between
 }
 
-
+.p_answer_noEnd{
+	cursor: pointer;
+	margin-bottom: 5px;
+}
 
 .questionList_item, .p_answer_noEnd_false{
 	cursor: pointer;
-	margin-bottom: 5px;
-	/* display: inline;
-	width: auto; */
-	text-align: right;
+	margin-bottom: 15px;
+	/* padding-left: 20px; */
+	display: inline;
+	width: auto;
+	text-align: center;
+	position: relative;
+	/* z-index: -10; */
 }
+
+.wrapper_questionList_item {
+	/* text-align: center; */
+}
+
 
 /* .wrapper_button_questionList_item{
 	display: none;
@@ -123,10 +141,25 @@ body,
 
 .wrapper_AnswerAll{
 	margin-bottom: 10px;
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-around;
+	position: relative;
+	z-index: -10;
+	
+}
+
+.item_answer_list{
+	cursor: pointer;
+	margin-bottom: 5px;
 }
 
 .wrapper_questionList_item{
-	/* width: auto; */
+	/* display: flex; */
+	justify-content: center;
+	width: auto;
+	margin-bottom: 10px;
+	margin-top: 10px;
 }
 
 .head_p{
@@ -142,4 +175,26 @@ body,
 
 .wrapper_false_answers_head{
 	display: none;
+}
+
+.answers_false_beginning{
+	
+}
+
+
+
+.wrapper_questions_answers{
+	width: 66vw;
+}
+
+
+
+.droppable {
+	border: 2px dashed #aaa;
+	padding: 30px;
+	margin: 10px;
+}
+
+.droppable.active {
+	border-color: #4CAF50;
 }

@@ -24,103 +24,209 @@ let answers_false_beginning = document.querySelector('.answers_false_beginning')
 let answers = document.querySelector('.answers') // контейнер всех ответов на странице вопросов и ответов
 let answers_head = document.querySelector('.answers_head') // контейнер всех ответов на странице програмирования скрипта
 let wrapper_false_answers_head = document.querySelector('.wrapper_false_answers_head') // контейнер контейнера всех ответов на странице програмирования скрипта
-
-
-
+let addanswer_from_list = document.querySelector('.addanswer_from_list') // кнопка "добавить готовый ответ"
 let head_p = document.querySelector('.head_p') // кнопка изменения головного ответа для вопроса
 
 let question_answer = [] // массив содержащий все объекты вопросов и ответов
 let dinamicListArr = [] // массив содержащий все объекты динамических полей
 let answerNoBeginning = [] // массив объектов вопросы без начала
 
+head_p.addEventListener('click', (event) =>{
 
+	answers_false_beginning.innerHTML = ''
+	wrapper_false_answers_head.style.display = 'block' // показываем контейнер контейнера всех ответов на странице програмирования скрипта
+	question_answer.forEach(element => {
+		for (const key in element.answer_all) {
+			let id = key
+			let status = element.answer_all[key].answer_status
+			let text = element.answer_all[key].answer
+			// console.log(element.answer_all[key].answer_status);
+			if (status == false) {
+				console.log(text);
+				answers_false_beginning.innerHTML +=`
+				<div class="wrapper_AnswerNoEnd">
+				<p class="p_answer_noEnd" status="${status}" id="${id}">${text}</p>
+				</div>
+				`
+			}
+		}
+	});
 
-// head_p.addEventListener('click', (event) =>{
-// 	// answerDisplay(answers_head, 'head') // отображение всех ответов
-// 	displayingListAnswerNobeginning('head')
-// 	wrapper_false_answers_head.style.display = 'block' // показываем контейнер контейнера всех ответов на странице програмирования скрипта
-// 	let p_answer_noBeginning_falsehead = document.querySelectorAll('.p_answer_noBeginning_falsehead') // ищем все ответы на странице
-// 	for (const iterator of p_answer_noBeginning_falsehead) {
-// 		iterator.addEventListener('click', (event) =>{
-// 			let id = iterator.getAttribute('id')
-// 			console.log(id);
-// 			myTxtArea.setAttribute('id', id)
-		
-// 		})
-// 	}
-	
-
-// 	})
-
-
-// canvasAdd()
+	let p_answer_noEnd = document.querySelectorAll('.p_answer_noEnd')
+		for (const iterator of p_answer_noEnd) {
+			iterator.addEventListener('click', (event) =>{
+				let idDel = myTxtArea.getAttribute('id')
+			let id = iterator.getAttribute('id')
+			myForm_h2.textContent = event.target.textContent
+			myTxtArea.setAttribute('id', id)
+			addquestionClick()
+			addquestionList_itemDelete(idDel)
+				})
+		}
+	})
 
 function canvasAdd() { // рисование стрелок
+	lineRemove()
 	let questionList_item = document.querySelectorAll('.questionList_item') // все параграфы всех вопросов
 	let p_answer_all = document.querySelectorAll('.p_answer_all') // все параграфы  всех ответов
 
 	questionList_item.forEach(ques => {
-		// console.log(ques);
 		let idQest = ques.getAttribute('id')
 		p_answer_all.forEach(answer => {
-			// console.log(answer);
 			let idAnswer = answer.getAttribute('id')
 			let idQuestion = answer.getAttribute('idQuestion')
 			if (idQest == idAnswer) {
-					new LeaderLine(
-						answer, ques, {color: '#00bcd4', size: 4, outlineColor: 'red', outline: true}
-						// startSocket: 'top', endSocket: 'bottom'
+					let line = new LeaderLine(
+						answer, ques, {color: '#34C924', size: 5, outlineColor: '#F12B35', outline: true, startSocket: 'bottom', endSocket: 'top', endPlugSize: 0.8}
 					);
-									
+					leaderLineGet(line) 
 			}
 			if (idQuestion == idQest) {
-				new LeaderLine(
-					ques, answer, {color: '#f0bad4', size: 4,	outlineColor: 'red', outline: true}
-				);
-								
+
 		}
+		
 		});
 
+	});
+	
+}
 
 
+ function leaderLineGet(line) {
+	let leaderLine = document.querySelectorAll('.leader-line')
+	let lastElem = leaderLine[leaderLine.length - 1];
+	let width = +(getComputedStyle(lastElem).width.slice(0, -2))
+
+	if (width < 50) {
+		line.startSocket = 'left'
+		line.endSocket = 'left'
+	}
+	
+ }
+
+
+
+// function answerDisplay() { // отображение всех ответов
+// 	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer
+// 	answers.innerHTML = ''
+// 	// let result = question_answer.find(function(item, index, array) {
+// 	// 	return item.id == id
+// 	// });
+	
+// 	for (const iterator of question_answer) {
+		
+// 		for (const key in iterator.answer_all) {
+// 			let id = key
+// 			let status = iterator.answer_all[key].answer_status
+// 			let text = iterator.answer_all[key].answer
+// 			let idQuestion = iterator.answer_all[key].idQuestion
+// 			answers.innerHTML += `
+// 				<div class="wrapper_AnswerAll">
+// 					<p class="p_answer_all" status="${status}" id="${id}" idQuestion="${idQuestion}">${text}</p>
+// 				</div>
+// 			`
+// 		}
+// 	}
+
+// 	// <span></span>
+
+
+
+// }
+
+function displayingListQuestions() { // вывод на экран списка всех вопросов
+	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer
+
+	questions.innerHTML = '' // очищаем контейнер списка всех вопросов
+	question_answer.forEach(element => { // для каждого вопроса выводим на экран текст вопроса
+		questions.innerHTML += `
+		<div class="wrapper_questionList_item droppable dropArea draggable" draggable="true" >
+			<p class="questionList_item" id="${element.id}">${element.question}</p>
+		
+			<div class="wrapper_AnswerAll"></div>
+		</div>
+		`
+		let wrapper_AnswerAll = document.querySelectorAll('.wrapper_AnswerAll') // ищем только что созданный див wrapper_AnswerAll
+
+		
+		let lastElem = wrapper_AnswerAll[wrapper_AnswerAll.length - 1];
+		// console.log(lastElem);
+		// debugger
+
+		if (element.answer_all != "ответов на вопрос нет") {
+			for (const key in element.answer_all) {
+				let id = key
+				let status = element.answer_all[key].answer_status
+				let text = element.answer_all[key].answer
+				let idQuestion = element.answer_all[key].idQuestion
+				lastElem.innerHTML += `
+				
+				
+						<p class="p_answer_all" status="${status}" id="${id}" idQuestion="${idQuestion}">${text}</p>
+				
+				`
+			}
+	
+		}
+		
+
+		// console.log(element.answer_all)
+		// console.log(element)
 
 
 
 	});
-
-	
-
 }
 
+getGuestionsNoParent()
+function getGuestionsNoParent() {
+	question_answerArrInlocalStorage() // поулчаем массив question_answer
+	let temp = {} // заглушка
+	temp.id = 2
+	let tempArr = question_answer.concat()
 
-function answerDisplay(item = answers, cl = '') { // отображение всех ответов
-	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer
-	item.innerHTML = ''
-	// let result = question_answer.find(function(item, index, array) {
-	// 	return item.id == id
-	// });
-	
-	for (const iterator of question_answer) {
+	tempArr.forEach((element, index) => {
+		tempArr.forEach((item) => {
+			for (const key in item.answer_all) {
+				if (key == element.id) {
+					tempArr.splice(index, 1, temp)
+				}
+			}
+		});
+
+	});
+	tempArr.forEach((element, index) => {
+		if (element.id == 1 ) {
+			tempArr.splice(index, 1)
+		}
+	})
+
+let results = tempArr.filter(function(item, index, array) {
+		return  item.id != 2 
+	});
+
+
+
+console.log(results);
+
+
+question_answer.forEach(element => {
+	for (const iterator of results) {
+		// console.log(iterator.id);
+		if (element.id == iterator.id) {
+			// console.log(element);
 		
-		for (const key in iterator.answer_all) {
-			let id = key
-			let status = iterator.answer_all[key].answer_status
-			let text = iterator.answer_all[key].answer
-			let idQuestion = iterator.answer_all[key].idQuestion
-			item.innerHTML += `
-				<div class="wrapper_AnswerAll">
-					<p class="p_answer_all${cl}" status="${status}" id="${id}" idQuestion="${idQuestion}">${text}</p>
-				</div>
-			`
 		}
 	}
+	
 
-	// <span></span>
 
+
+	
+});
 
 
 }
-
 
 
  
@@ -142,15 +248,24 @@ list_button.addEventListener('click', () => list_buttonClick()) // кнопка 
 // list_buttonClick()
 
 function list_buttonClick() { // кнопка "вопросы и ответы" событие клик
+	wrapper_false_answers_head.style.display = 'none'
 	wrapper_list.style.display = 'flex'
 	wrapper_work.style.display = 'none'
 	wrapper_programming.style.display = 'none'
 	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer и получаем его
+
+
 	displayingListQuestions(question_answer) // вывод на экран списка всех вопросов
+
+
 	questionList_itemClick() // событие клик по вопросу из списка вопросов
 	displayingListAnswerNoEnd(question_answer) // отображение списка ответов без продолжения
 	// displayingListAnswerNobeginning() // отображение списка ответов без начала
-	answerDisplay() // отображение всех ответов
+
+
+	// answerDisplay() // отображение всех ответов
+
+	dragGableGo() // перемещение вопросов
 	canvasAdd() // рисуем стрелки
 }
 
@@ -168,7 +283,7 @@ function displayingListAnswerNoEnd(question_answer) { // отображение 
 	question_answer.forEach((item) => {
 		for (const key in item.answer_all) {
 			let status = item.answer_all[key].answer_status
-			// debugger
+			
 			let id = key
 			if (status == false) {
 				answers_false.innerHTML += `
@@ -188,7 +303,7 @@ function displayingListAnswerNoEnd(question_answer) { // отображение 
 			myTxtArea.setAttribute('id', id)
 			iterator.textContent
 			myTxtArea.setAttribute('placeholder', 'Задайте вопрос')
-			// debugger
+	
 			myForm_h2.textContent = iterator.textContent
 			wrapanswer.innerHTML = '' // очищаем контейнер ответов
 			myTxtArea.value = '' // очищаем текстареа вопроса
@@ -199,17 +314,7 @@ function displayingListAnswerNoEnd(question_answer) { // отображение 
 }
 
 
-function displayingListQuestions(question_answer) { // вывод на экран списка всех вопросов
-	questions.innerHTML = '' // очищаем контейнер списка всех вопросов
-	question_answer.forEach(element => { // для каждлого вопроса выводим на экран текст вопроса
-		questions.innerHTML += `
-		<div class="wrapper_questionList_item">
-			<p class="questionList_item" id="${element.id}">${element.question}</p>
-			
-		</div>
-		`
-	});
-}
+
 
 function questionList_itemClick() { // событие клик по вопросу из списка вопросов
 
@@ -217,12 +322,14 @@ function questionList_itemClick() { // событие клик по вопрос
 
 	for (const iterator of questionList_item) {
 		iterator.addEventListener('click', (event) => {
+			
+			
 			let id = event.target.id // получаем id вопроса
 
 			let wrapper_button_questionList_item = document.querySelector('.wrapper_button_questionList_item')// ищем контейнер кнопок
 
 			if (wrapper_button_questionList_item == null) { // если контейнер кнопок не существует
-
+				
 				let wrapper_button_questionList_item = document.createElement('div') // создаем новый div
 				wrapper_button_questionList_item.classList.add('wrapper_button_questionList_item') // присваиваем div класс wrapper_button_questionList_item
 				iterator.parentElement.append(wrapper_button_questionList_item) // добавляем div в конец родителя
@@ -232,9 +339,11 @@ function questionList_itemClick() { // событие клик по вопрос
 					<button class="edit_questionList_item">Редактировать</button>
 					<button class="delete_questionList_item">Удалить</button>
 				`
+				
 			} else {
 				wrapper_button_questionList_item.remove() // удаляем wrapper_button_questionList_item
 			}
+			canvasAdd()
 			let edit_questionList_item = document.querySelector('.edit_questionList_item') // ищем кнопку edit_questionList_item ("Редактировать")
 			let delete_questionList_item = document.querySelector('.delete_questionList_item') // ищем кнопку delete_questionList_item ("Удалить")
 			edit_questionList_item.addEventListener('click', (event) =>{ // событие клик для кнопки "Редактировать"
@@ -253,13 +362,50 @@ function questionList_itemClick() { // событие клик по вопрос
 
 	}
 
+	addanswer_from_list.addEventListener('click', (event) =>{
+		console.log('skdjf hskdf');
+		
+		let addanswer_list = document.querySelector('.addanswer_list')
+		addanswer_list.innerHTML = ''
+		for (const iterator of question_answer) {
+			console.log(iterator.answer_all);
+			for (const key in iterator.answer_all) {
+				console.log(iterator.answer_all[key].answer);
+				console.log(iterator.answer_all[key].answer_status);
+				console.log(key);
+				let status = iterator.answer_all[key].answer_status
+	
+				let tempP = `<p class="item_answer_list" status='${status}' id="${key}">${iterator.answer_all[key].answer}</p>`
+				addanswer_list.innerHTML +=`
+				<p class="item_answer_list" status='${status}' id="${key}">${iterator.answer_all[key].answer}</p>
+				`
+	
+				let item_answer_list = document.querySelectorAll('.item_answer_list')
+				for (const iterator of item_answer_list) {
+					iterator.addEventListener('click', (event) =>{
+						let status = event.target.getAttribute('status')
+						let id = event.target.getAttribute('id')
+						addanswerClick(id, status) 
+					})
+				}
+				
+			}
+	
+		}
+	
+		})
+
+
+		
+	
+
 	// addquestionList_itemClick(questionList_item)
 	// wrapAnswerAdd.innerHTML = ''
 
 	// question_answer.forEach(function (item) {
 
 	// 	for (const iterator in item.answer_all) {
-	// 		// debugger
+	// 		
 	// 		let status = item.answer_all[iterator].answer_status
 	// 		if (status == 'false') {
 	// 			let tempP = `<p class="p_answer_false" status='${status}' id="${iterator}">${item.answer_all[iterator].answer}</p>`
@@ -345,7 +491,7 @@ function addquestionList_itemDelete(id) { // запускаем функцию �
 // 	// 	for (const key in item.answer_all) {
 // 	// 		// console.log(item.answer_all[key].beginning);
 // 	// 		let status = item.answer_all[key].beginning
-// 	// 		// debugger
+// 	// 		
 // 	// 		let id = key
 // 	// 		if (status == false) {
 				
@@ -372,7 +518,7 @@ function addquestionList_itemClick(id) { // редакирования вопр�
 
 myTxtArea.value = result.question
 myTxtArea.setAttribute('id', result.id)
-// debugger
+
 if (result.id == '1') {
 	myForm_h2.textContent = 'Стартовый вопрос'
 } else {
@@ -406,7 +552,7 @@ for (const key in result.answer_all) {
 // 	for (const iterator of questionList_item) { // для каждого
 		
 // 		iterator.addEventListener('click', (event) =>{
-// // debugger
+
 // 			wrapprogramming.style.display = 'block'
 						
 // 			// tempP = ''
@@ -611,11 +757,17 @@ function dinamicDellFunc() { // функция удаления динамиче
 	}
 }
 
-addquestion.addEventListener('click', (event) => addquestionClick(event)) // кнопка готово
+addquestion.addEventListener('click', (event) => addquestionClick()) // кнопка готово
 
-function addquestionClick(event) {
+function addquestionClick() {
 	event.preventDefault()
+
 	let question = document.querySelector('.question') // ищем текстареа question
+	if (question.value == '') {
+		alert('Вопрос не может быть пустым')
+		return
+		
+	}
 	let id = question.getAttribute('id') // получаем id текстареа question
 
 	if (question_answerArrInlocalStorage()) { // проверяем существование сохраненного в localStorage массива question_answer 
@@ -740,7 +892,9 @@ function addQuestionArr(id, question) { // добавление нового о�
 	arr.answer_all = {} // новый объект ответов
 
 	if (answer.length == 0) { // если ответов на вопрос нет
-		arr.answer_all = 'ответов на вопрос нет'
+		// 9IBAnJ5dtncg62Gp 'ответов на вопрос нет'
+
+		arr.answer_all = {}
 	} else {
 		for (const iterator of answer) { // для каждого ответа (элемента)
 			let status = iterator.getAttribute('status') // получаем значение отрибута status
@@ -758,7 +912,7 @@ function addQuestionArr(id, question) { // добавление нового о�
 	}
 	question_answerArrInlocalStorage() // получаем сохраненный в localStorage массива question_answer 
 
-// debugger
+
 	
 
 	
@@ -805,7 +959,7 @@ function dinamicListArrInlocalStorage() { // проверяем существо
 }
 
 question_answerArrInlocalStorage()
-console.log(question_answer);
+// console.log(question_answer);
 
 function question_answerArrInlocalStorage() { // проверяем существование сохраненного в localStorage массива question_answer
 
@@ -840,3 +994,106 @@ function getId(length = 16) { // генерация случайного ном�
 
 // localStorage.clear()
 
+
+// dragGableGo()
+
+function dragGableGo() {
+	let draggableElement = document.querySelectorAll('.draggable');
+	let dropArea = document.querySelectorAll('.dropArea')
+	let itemDell 
+	question_answerArrInlocalStorage()
+	for (const iterator of draggableElement) {
+		iterator.addEventListener('dragstart', function (event) {
+			
+			let id = event.target.childNodes[1].getAttribute('id')
+
+			let count = question_answer.findIndex(item => {
+				// console.log(item.id);
+				// console.log(id);
+				itemDell = item
+				return item.id == id})
+				let temp = {}
+					temp.id = 2
+				
+				// console.log(count);
+				question_answer.splice(count, 1, temp)
+			
+		});
+	}
+	
+	for (const iterator of dropArea) {
+		iterator.addEventListener('dragover', function (event) {
+			event.preventDefault();
+			// Добавляем класс, чтобы стилизовать визуальное отображение целевой области
+			iterator.classList.add('active');
+		});
+	}
+	
+	for (const iterator of dropArea) {
+		iterator.addEventListener('dragleave', function () {
+			// Удаляем класс после того, как курсор покинул целевую область
+			iterator.classList.remove('active');
+		});
+	}
+
+	for (const iterator of dropArea) {
+		// question_answerArrInlocalStorage()
+		iterator.addEventListener('drop', function (event) {
+	
+			try{
+				event.target
+				let id = event.target.childNodes[1].getAttribute('id')
+				let count = question_answer.findIndex(item => {
+					
+					if (item.id == id) {
+						console.log('item ' + item);
+					console.log('item.id ' + item.id);
+					console.log('id ' + id);
+					}
+					return item.id == id
+				})
+				console.log(count);
+				// console.log(question_answer);
+				question_answer.splice(count, 0, itemDell)
+				let tempDel = question_answer.findIndex(item => {
+					// console.log(item);
+					// console.log(item.id);
+					// console.log(id);
+					return item.id == 2
+				})
+				question_answer.splice(tempDel, 1)
+			} catch {
+				alert('Что-то пошло не так. Пожалуйста попробуйте снова')
+				list_buttonClick()
+			}
+			
+			
+			
+			question_answerArrSetlocalStorage(question_answer)
+			list_buttonClick()
+			// canvasAdd()
+			// dragGableGo()
+			
+			event.preventDefault();
+
+			// Удаляем класс после завершения бросания
+			iterator.classList.remove('active');
+		});
+	}
+	
+}
+
+
+
+
+question_answerArrInlocalStorage()
+
+// let tempDel = question_answer.findIndex(item => {
+// 	console.log(item);
+// 	console.log(item.id);
+// 	// console.log(id);
+// 	return item.id == 2
+// })
+
+// question_answer.splice(0, 1)
+// question_answerArrSetlocalStorage(question_answer)

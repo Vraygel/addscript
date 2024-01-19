@@ -693,6 +693,7 @@ function answerQuestionAdd(tempP, id, text) {
 
 
 addanswer_from_list.addEventListener('click', (event) =>{
+	console.log('skdjf hskdf');
 
 	let addanswer_list = document.querySelector('.addanswer_list')
 
