@@ -178,7 +178,7 @@ body,
 }
 
 .answers_false_beginning{
-	
+
 }
 
 
@@ -197,4 +197,12 @@ body,
 
 .droppable.active {
 	border-color: #4CAF50;
+}
+
+.p_answer_work{
+	cursor: pointer;
+}
+
+.wrap_p_work{
+	margin-top: 10px;
 }

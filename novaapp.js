@@ -31,7 +31,9 @@ let question_answer = [] // массив содержащий все объек�
 let dinamicListArr = [] // массив содержащий все объекты динамических полей
 let answerNoBeginning = [] // массив объектов вопросы без начала
 
-head_p.addEventListener('click', (event) =>{
+let countsd = 0
+
+head_p.addEventListener('click', (event) => {
 
 	answers_false_beginning.innerHTML = ''
 	wrapper_false_answers_head.style.display = 'block' // показываем контейнер контейнера всех ответов на странице програмирования скрипта
@@ -42,8 +44,7 @@ head_p.addEventListener('click', (event) =>{
 			let text = element.answer_all[key].answer
 			// console.log(element.answer_all[key].answer_status);
 			if (status == false) {
-				console.log(text);
-				answers_false_beginning.innerHTML +=`
+				answers_false_beginning.innerHTML += `
 				<div class="wrapper_AnswerNoEnd">
 				<p class="p_answer_noEnd" status="${status}" id="${id}">${text}</p>
 				</div>
@@ -53,17 +54,17 @@ head_p.addEventListener('click', (event) =>{
 	});
 
 	let p_answer_noEnd = document.querySelectorAll('.p_answer_noEnd')
-		for (const iterator of p_answer_noEnd) {
-			iterator.addEventListener('click', (event) =>{
-				let idDel = myTxtArea.getAttribute('id')
+	for (const iterator of p_answer_noEnd) {
+		iterator.addEventListener('click', (event) => {
+			let idDel = myTxtArea.getAttribute('id')
 			let id = iterator.getAttribute('id')
 			myForm_h2.textContent = event.target.textContent
 			myTxtArea.setAttribute('id', id)
 			addquestionClick()
 			addquestionList_itemDelete(idDel)
-				})
-		}
-	})
+		})
+	}
+})
 
 function canvasAdd() { // рисование стрелок
 	lineRemove()
@@ -76,18 +77,22 @@ function canvasAdd() { // рисование стрелок
 			let idAnswer = answer.getAttribute('id')
 			let idQuestion = answer.getAttribute('idQuestion')
 			if (idQest == idAnswer) {
-					let line = new LeaderLine(
-						answer, ques, {color: '#34C924', size: 5, outlineColor: '#F12B35', outline: true, startSocket: 'bottom', endSocket: 'top', endPlugSize: 0.8}
-					);
-					leaderLineGet(line) 
+				let line = new LeaderLine(
+					answer, ques, { color: '#34C924', size: 5, outlineColor: '#F12B35', outline: true, startSocket: 'bottom', endSocket: 'top', endPlugSize: 0.8 }
+				);
+				leaderLineGet(line)
 			}
-			if (idQuestion == idQest) {
-		}
+			// 	if (idQuestion == idQest) { // не удалять
+			// 		let line = new LeaderLine( 
+			// 			ques, answer, {color: '#34C924', size: 5, outlineColor: '#F12B35', outline: true, startSocket: 'bottom', endSocket: 'top', endPlugSize: 0.8}
+			// 		);
+			// 		leaderLineGet(line) 
+			// }
 		});
 	});
 }
 
- function leaderLineGet(line) {
+function leaderLineGet(line) {
 	let leaderLine = document.querySelectorAll('.leader-line')
 	let lastElem = leaderLine[leaderLine.length - 1];
 	let width = +(getComputedStyle(lastElem).width.slice(0, -2))
@@ -95,7 +100,7 @@ function canvasAdd() { // рисование стрелок
 		line.startSocket = 'left'
 		line.endSocket = 'left'
 	}
- }
+}
 
 function displayingListQuestions() { // вывод на экран списка всех вопросов
 	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer
@@ -127,7 +132,7 @@ function displayingListQuestions() { // вывод на экран списка 
 
 getGuestionsNoParent()
 function getGuestionsNoParent() {
-	question_answerArrInlocalStorage() // поулчаем массив question_answer
+	question_answerArrInlocalStorage() // получаем массив question_answer
 	let temp = {} // заглушка
 	temp.id = 2
 	let tempArr = question_answer.concat()
@@ -141,24 +146,24 @@ function getGuestionsNoParent() {
 		});
 	});
 	tempArr.forEach((element, index) => {
-		if (element.id == 1 ) {
+		if (element.id == 1) {
 			tempArr.splice(index, 1)
 		}
 	})
 
-let results = tempArr.filter(function(item, index, array) {
-		return  item.id != 2 
+	let results = tempArr.filter(function (item, index, array) {
+		return item.id != 2
 	});
 
-console.log(results);
+	// console.log(results); // Не удалять
 
-question_answer.forEach(element => {
-	for (const iterator of results) {
-		// console.log(iterator.id);
-		if (element.id == iterator.id) {
+	question_answer.forEach(element => {
+		for (const iterator of results) {
+			// console.log(iterator.id);
+			if (element.id == iterator.id) {
+			}
 		}
-	}
-});
+	});
 }
 
 programming_button.addEventListener('click', () => programming_buttonClick()) // кнопка "програмирование скрита" событие клик
@@ -197,7 +202,7 @@ function displayingListAnswerNoEnd(question_answer) { // отображение 
 	question_answer.forEach((item) => {
 		for (const key in item.answer_all) {
 			let status = item.answer_all[key].answer_status
-			
+
 			let id = key
 			if (status == false) {
 				answers_false.innerHTML += `
@@ -217,7 +222,7 @@ function displayingListAnswerNoEnd(question_answer) { // отображение 
 			myTxtArea.setAttribute('id', id)
 			iterator.textContent
 			myTxtArea.setAttribute('placeholder', 'Задайте вопрос')
-	
+
 			myForm_h2.textContent = iterator.textContent
 			wrapanswer.innerHTML = '' // очищаем контейнер ответов
 			myTxtArea.value = '' // очищаем текстареа вопроса
@@ -249,16 +254,16 @@ function questionList_itemClick() { // событие клик по вопрос
 			canvasAdd()
 			let edit_questionList_item = document.querySelector('.edit_questionList_item') // ищем кнопку edit_questionList_item ("Редактировать")
 			let delete_questionList_item = document.querySelector('.delete_questionList_item') // ищем кнопку delete_questionList_item ("Удалить")
-			edit_questionList_item.addEventListener('click', (event) =>{ // событие клик для кнопки "Редактировать"
+			edit_questionList_item.addEventListener('click', (event) => { // событие клик для кнопки "Редактировать"
 				addquestionList_itemClick(id) // запускаем функцию редакирования вопроса
-				})
-				delete_questionList_item.addEventListener('click', (event) =>{ // событие клик для кнопки "Удалить"
-					addquestionList_itemDelete(id) // запускаем функцию удаление вопроса
-					})
+			})
+			delete_questionList_item.addEventListener('click', (event) => { // событие клик для кнопки "Удалить"
+				addquestionList_itemDelete(id) // запускаем функцию удаление вопроса
+			})
 		})
 	}
 
-	addanswer_from_list.addEventListener('click', (event) =>{
+	addanswer_from_list.addEventListener('click', (event) => {
 		let addanswer_list = document.querySelector('.addanswer_list')
 		addanswer_list.innerHTML = ''
 		for (const iterator of question_answer) {
@@ -269,25 +274,25 @@ function questionList_itemClick() { // событие клик по вопрос
 				console.log(key);
 				let status = iterator.answer_all[key].answer_status
 				let tempP = `<p class="item_answer_list" status='${status}' id="${key}">${iterator.answer_all[key].answer}</p>`
-				addanswer_list.innerHTML +=`
+				addanswer_list.innerHTML += `
 				<p class="item_answer_list" status='${status}' id="${key}">${iterator.answer_all[key].answer}</p>
 				`
 				let item_answer_list = document.querySelectorAll('.item_answer_list')
 				for (const iterator of item_answer_list) {
-					iterator.addEventListener('click', (event) =>{
+					iterator.addEventListener('click', (event) => {
 						let status = event.target.getAttribute('status')
 						let id = event.target.getAttribute('id')
-						addanswerClick(id, status) 
+						addanswerClick(id, status)
 					})
 				}
 			}
 		}
-		})
+	})
 }
 
 function addquestionList_itemDelete(id) { // запускаем функцию удаление вопроса
 	question_answerArrInlocalStorage() // получаем массив вопросов-ответов
-	let result = question_answer.find(function(item, index, array) {
+	let result = question_answer.find(function (item, index, array) {
 		if (item.id == id) {
 			array.splice(index, 1)
 			return item.id == id
@@ -309,38 +314,146 @@ function addquestionList_itemClick(id) { // редакирования вопр�
 	programming_buttonClick() // кнопка "програмирование скрита" событие клик отображение поля редактирования вопросов-ответов
 	question_answerArrInlocalStorage() // получаем массив ответов-вопросов question_answer
 	wrapanswer.innerHTML = '' // очищаем контейнер ответов
- let result = question_answer.find(function(item, index, array) {
-	return item.id == id
-});
-myTxtArea.value = result.question
-myTxtArea.setAttribute('id', result.id)
-if (result.id == '1') {
-	myForm_h2.textContent = 'Стартовый вопрос'
-} else {
-	question_answer.forEach((item) => {
-		for (const key in item.answer_all) {
-			let id = key
-			if (id == result.id) {
-				myForm_h2.textContent = item.answer_all[key].answer
-				
+	let result = question_answer.find(function (item, index, array) {
+		return item.id == id
+	});
+	myTxtArea.value = result.question
+	myTxtArea.setAttribute('id', result.id)
+	if (result.id == '1') {
+		myForm_h2.textContent = 'Стартовый вопрос'
+	} else {
+		question_answer.forEach((item) => {
+			for (const key in item.answer_all) {
+				let id = key
+				if (id == result.id) {
+					myForm_h2.textContent = item.answer_all[key].answer
+
+				}
 			}
-		}
-	})
+		})
+	}
+	for (const key in result.answer_all) {
+		let status = result.answer_all[key].answer_status
+		addanswerClick(key, status)
+	}
 }
-for (const key in result.answer_all) {
-	let status = result.answer_all[key].answer_status
-	addanswerClick(key, status)
-}
- }
 
 work_button.addEventListener('click', () => work_buttonClick()) // кнопка "Показать скрипт" событие клик
-
+work_buttonClick() 
 function work_buttonClick() { // кнопка "Показать скрипт" событие клик
+	wrapper_work.innerHTML = '' // очищаем конейнер работы со скриптом
 	wrapper_work.style.display = 'block'
 	wrapper_list.style.display = 'none'
 	wrapper_programming.style.display = 'none'
-	lineRemove() // удаление кнопок
+	lineRemove() // удаление стрелок
+	question_answerArrInlocalStorage() // получаем значение массива вопросов-ответов question_answer
+	
+	question_answer.forEach((element, index) => {
+		let rez = question_answer.find(item => item.id == 1) // ищмем стартовый вопрос с id 1
+		if (element.id == 1) {
+			question_answer.splice(index, 1) // вырезаем стартовый вопрос из массива question_answer
+			question_answer.splice(0, 0, rez) // втавляем статовый вопрос на первую позицию
+			question_answerArrSetlocalStorage(question_answer) // сохраняем question_answer
+		}
+		// wrapper_work.innerHTML += `
+				
+		// 		<div class="wrap_p_work">
+			
+		// 		${element.questionHTML}
+		// 		<br><br>
+		// 		</div>
+		// 		`
+	});
+	displayAnswer(question_answer, 1) // отображение вопроса и ответов к нему начиная со стартового вопроса
 }
+
+
+
+function displayAnswer(question_answer, id) { // отображение вопроса и ответов к нему
+	let wrapper_work = document.querySelector('.wrapper_work') // ищем контейнер работы со скриптом
+	// wrapper_work.innerHTML = '' // очищаем контейнер работы со скриптом
+	// console.log(arr);
+	// debugger
+	// console.log(arr);
+	if (question_answer.length == 0) { // если массив question_answer пустой
+		wrapper_work.innerHTML = `
+					Скрипт в разработке
+					`
+	}
+	let wrap_p_work = document.querySelector('.wrap_p_work') // ищем контейнер конкретного вопроса с ответами
+	if (wrap_p_work) { // если контейнер существует
+		wrap_p_work.className = 'wrap_p_work_prev' // присваиваем класс wrap_p_work_prev (предидущий ответ)
+	}
+	
+	for (const iterator of question_answer) {
+		// console.log(iterator);
+
+		// for (const key in iterator) {
+			// console.log(key);
+			// console.log(iterator[key]);
+
+			if (iterator.id == id) { // если id вопроса равно id переданного вопроса
+				// к контейнеру вопросов и ответов добавляем контейнер вопроса
+				wrapper_work.innerHTML += ` 
+					<div class="wrap_p_work">
+						${iterator.questionHTML}
+					<br>
+					</div>
+				`
+				wrap_p_work = document.querySelector('.wrap_p_work') // ищем вновь созданный контейнер конкретного вопроса с ответами
+
+				let temp = '' // создаем пустую переменную
+				for (const key in iterator.answer_all) { // для каждого ответа этого вопроса
+					temp = iterator.answer_all[key].answer // присваиваем текст ответа
+					// к контейнеру конкретного вопроса добавляем тексты ответов
+					wrap_p_work.innerHTML += `
+						<p class="p_answer_work" id="${key}">${temp}</p>
+					`
+				}
+				break
+			}
+			
+		// }
+	}
+	wrapper_work.innerHTML += ` 
+					<div class="plug">
+						
+					<br>
+					</div>
+				`
+	nextQuestion() // функция ожидает клик по ответу и запускат отображение вопроса, который следут за этим ответом
+}
+
+
+
+function nextQuestion() { // функция ожидает клик по ответу и запускат отображение вопроса, который следут за этим ответом
+	// debugger
+	countsd += 1
+	console.log(countsd);
+	let p = document.querySelectorAll('.p_answer_work') // ищем все ответы на вопрос
+	console.log(p);
+	let wrap_p_work = document.querySelector('.wrap_p_work')
+
+	for (const iterator of p) { // для каждого ответа
+		console.log('подписаля на клик ' + iterator);
+		iterator.addEventListener('click', (event) =>{ // подписываемся на событие клик
+			
+		// debugger
+		console.log(event.target.parentElement.nextElementSibling);
+			for (let index = 0; event.target.parentElement.nextElementSibling; index++) { // ищем все последующих соседей и удаляем их
+				event.target.parentElement.nextElementSibling.remove()
+			}
+			let id = event.target.getAttribute('id') // определяем id ответа
+			displayAnswer(question_answer, id) // запускаем функцию отображения вопроса по id ответа
+			})
+		
+			// wrapwork.scrollTo(50, 0)
+
+	}
+}
+
+
+
 
 for (const iterator of dinamic_div_hide) { // для всех кнопок "скрыть" динамичекое поле
 	iterator.addEventListener('click', (event) => { // событие клик
@@ -508,7 +621,7 @@ function addanswerClick(id, status) { // добавить текстареа о�
 				iterator.value = localStorage.getItem(`${key}`) // текст ответа бери из localStorage
 			}
 			iterator.addEventListener('input', () => { // событие input для текстареа ответа
-			localStorage.setItem(`${key}`, iterator.value) // записать в localStorage текст ответа с ключем
+				localStorage.setItem(`${key}`, iterator.value) // записать в localStorage текст ответа с ключем
 			})
 		}
 	}
@@ -519,11 +632,11 @@ function deleteAnswerClick() {
 	let wrapper_button_answer = document.querySelectorAll('.wrapper_button_answer') // находим все контейнеры ответов
 	let deleteAnswer = document.querySelectorAll('.deleteAnswer') // находим все кнопки "Удалить ответ"
 	for (const iterator of deleteAnswer) { // для каждой кнопки (элемента) "Удалить ответ"
-		iterator.addEventListener('click', (event) =>{
+		iterator.addEventListener('click', (event) => {
 			iterator.parentElement.remove() // находим родителя и удаляем весь контейнер
 			question_answerArrInlocalStorage()
 			console.log(question_answer);
-			})
+		})
 	}
 }
 
@@ -543,7 +656,7 @@ function addQuestionArr(id, question) { // добавление нового о�
 			let status = iterator.getAttribute('status') // получаем значение отрибута status
 			if (status.toLowerCase() === "false") {
 				status = false;
-			} else{
+			} else {
 				status = true
 			}
 			let id = iterator.getAttribute('id') // получаем значение отрибута id
@@ -563,7 +676,6 @@ function answerTrueFalse(question_answer, id) { // устанавливаем о
 	for (const iterator of question_answer) {
 		if (iterator.answer_all[id]) {
 			iterator.answer_all[id].answer_status = true
-			console.log(question_answer);
 		}
 	}
 }
@@ -610,20 +722,21 @@ function getId(length = 16) { // генерация случайного ном�
 function dragGableGo() {
 	let draggableElement = document.querySelectorAll('.draggable');
 	let dropArea = document.querySelectorAll('.dropArea')
-	let itemDell 
+	let itemDell
 	question_answerArrInlocalStorage()
 	for (const iterator of draggableElement) {
 		iterator.addEventListener('dragstart', function (event) {
 			let id = event.target.childNodes[1].getAttribute('id')
 			let count = question_answer.findIndex(item => {
 				itemDell = item
-				return item.id == id})
-				let temp = {}
-					temp.id = 2
-				question_answer.splice(count, 1, temp)
+				return item.id == id
+			})
+			let temp = {}
+			temp.id = 2
+			question_answer.splice(count, 1, temp)
 		});
 	}
-	
+
 	for (const iterator of dropArea) {
 		iterator.addEventListener('dragover', function (event) {
 			event.preventDefault();
@@ -631,7 +744,7 @@ function dragGableGo() {
 			iterator.classList.add('active');
 		});
 	}
-	
+
 	for (const iterator of dropArea) {
 		iterator.addEventListener('dragleave', function () {
 			// Удаляем класс после того, как курсор покинул целевую область
@@ -641,7 +754,7 @@ function dragGableGo() {
 
 	for (const iterator of dropArea) {
 		iterator.addEventListener('drop', function (event) {
-			try{
+			try {
 				event.target
 				let id = event.target.childNodes[1].getAttribute('id')
 				let count = question_answer.findIndex(item => {
