@@ -26,6 +26,13 @@ let answers_head = document.querySelector('.answers_head') // контейнер
 let wrapper_false_answers_head = document.querySelector('.wrapper_false_answers_head') // контейнер контейнера всех ответов на странице програмирования скрипта
 let addanswer_from_list = document.querySelector('.addanswer_from_list') // кнопка "добавить готовый ответ"
 let head_p = document.querySelector('.head_p') // кнопка изменения головного ответа для вопроса
+let format_em = document.querySelector('.format_em') // кнопка "Курсив"
+let format_strong = document.querySelector('.format_strong') // кнопка "Жирный"
+let format_color = document.querySelector('.format_color') // кнопка "Цвет"
+let mceContainer = document.querySelector('.mce-container') // контейнер цветов
+let mini_but_color = document.querySelectorAll('.mini_but_color') // мини кнопка цвета
+let wrapp_dinamic_add = document.querySelector('.wrapp_dinamic_add') // контейнер добавления динамического поля
+// let dinamic_div_prog = document.querySelector('.dinamic_div_prog') // контейнер вставки динамического поля
 
 let question_answer = [] // массив содержащий все объекты вопросов и ответов
 let dinamicListArr = [] // массив содержащий все объекты динамических полей
@@ -339,7 +346,7 @@ function addquestionList_itemClick(id) { // редакирования вопр�
 }
 
 work_button.addEventListener('click', () => work_buttonClick()) // кнопка "Показать скрипт" событие клик
-work_buttonClick() 
+
 function work_buttonClick() { // кнопка "Показать скрипт" событие клик
 	wrapper_work.innerHTML = '' // очищаем конейнер работы со скриптом
 	wrapper_work.style.display = 'block'
@@ -428,26 +435,26 @@ function displayAnswer(question_answer, id) { // отображение вопр
 
 function nextQuestion() { // функция ожидает клик по ответу и запускат отображение вопроса, который следут за этим ответом
 	// debugger
-	countsd += 1
-	console.log(countsd);
-	let p = document.querySelectorAll('.p_answer_work') // ищем все ответы на вопрос
-	console.log(p);
+		let p = document.querySelectorAll('.p_answer_work') // ищем все ответы на вопрос
+
 	let wrap_p_work = document.querySelector('.wrap_p_work')
 
 	for (const iterator of p) { // для каждого ответа
-		console.log('подписаля на клик ' + iterator);
+
 		iterator.addEventListener('click', (event) =>{ // подписываемся на событие клик
 			
 		// debugger
-		console.log(event.target.parentElement.nextElementSibling);
+		// console.log(event.target.parentElement.nextElementSibling);
 			for (let index = 0; event.target.parentElement.nextElementSibling; index++) { // ищем все последующих соседей и удаляем их
 				event.target.parentElement.nextElementSibling.remove()
 			}
 			let id = event.target.getAttribute('id') // определяем id ответа
 			displayAnswer(question_answer, id) // запускаем функцию отображения вопроса по id ответа
+			scrollToTop()
 			})
 		
-			// wrapwork.scrollTo(50, 0)
+			
+		
 
 	}
 }
@@ -471,6 +478,7 @@ insertDinamic.addEventListener('click', (event) => insertDinamicClick(event)) //
 function insertDinamicClick(event) { // кнопка "вставить динамичекое поле" событие клик
 	event.preventDefault()
 	dinamic_div_prog.style.display = 'block'
+	dinamic_div.style.display = 'none'
 	dinamicListFunc('dinamic_add', 'Добавить') // запускаем отображение списка динамических полей с кнопкой "Добавить"
 	dinamicAddClick() // добавление динамического поля в текст 
 }
@@ -511,6 +519,7 @@ addDinamic.addEventListener('click', (event) => addDinamicClick()) // кнопк
 
 function addDinamicClick() { // кнопка "добавить динамичекое поле" событие клик
 	dinamic_div.style.display = 'block' // контейнер динимических полей добавление
+	dinamic_div_prog.style.display = 'none'
 	dinamicListFunc('dinamic_dell', 'Удалить') // отображение списка динамических полей с кнопкой "удалить" динамическое поле
 }
 
@@ -781,5 +790,74 @@ function dragGableGo() {
 }
 
 question_answerArrInlocalStorage()
+
+ 
+
+ 
+ format_em.addEventListener("click", (e) => {
+	e.preventDefault()
+	var range = window.getSelection().getRangeAt(0);
+	var selectionContents = range.extractContents();
+	var span = document.createElement("span");
+	span.style.fontStyle = 'italic';
+	span.appendChild(selectionContents);
+	range.insertNode(span);
+});
+
+format_strong.addEventListener("click", (e) => {
+	e.preventDefault()
+	var range = window.getSelection().getRangeAt(0);
+	var selectionContents = range.extractContents();
+	var span = document.createElement("span");
+	span.style.fontWeight = "600";
+	span.appendChild(selectionContents);
+	range.insertNode(span);
+});
+
+format_color.addEventListener('click', (e) => {
+	e.preventDefault()
+	mceContainer.style.display = 'block';
+
+	let textArea = document.querySelector('.myTxtArea');
+	let selectionStart = textArea.selectionStart;
+	console.log(selectionStart);
+	let selectionEnd = textArea.selectionEnd;
+	let oldText = textArea.value;
+
+	let prefix = oldText.substring(0, selectionStart);
+	let inserted = oldText.substring(selectionStart, selectionEnd);
+	console.log(inserted);
+	let suffix = oldText.substring(selectionEnd);
+	textArea.value = `${prefix}${inserted}${suffix}`;
+
+	for (const item of mini_but_color) {
+		item.addEventListener('click', (e) => {
+			console.log(item.getAttribute('data-mce-color'));
+			e.preventDefault()
+			var range = window.getSelection().getRangeAt(0);
+			var selectionContents = range.extractContents();
+			var span = document.createElement("span");
+			span.style.color = `${item.getAttribute('data-mce-color')}`;
+			console.log(span);
+			span.appendChild(selectionContents);
+			range.insertNode(span);
+			mceContainer.style.display = 'none';
+	
+		})
+	}
+
+})
+
+function scrollToTop() {
+	// debugger
+	// Получаем ссылку на элемент div, к которому нужно прокрутить страницу
+	let wrap_p_work = document.querySelector('.wrap_p_work')
+
+	// Прокручиваем страницу к верху указанного div
+	// document.documentElement.scrollTop = wrap_p_work.offsetTop;
+	wrap_p_work.scrollIntoView({ behavior: 'smooth' });
+}
+
+
 
 // localStorage.clear()

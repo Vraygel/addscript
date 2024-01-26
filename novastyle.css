@@ -64,14 +64,14 @@ body,
 
 .myTxtArea,
 .myTxtArea_div{
-	width: 98vw;
+	width: 100%;
 	/* height: 20vh;
 	height: auto; */
 	padding: 5px;
 	margin-top: 5px;
 	font-size: 16px;
 	font-family: monospace;
-
+	font-size: 20px;
 	border: solid 2px red;
 }
 
@@ -96,9 +96,23 @@ body,
 	border: solid 2px red;
 }
 
+.wrapp_dinamic_add{
+	display: none;
+}
+
 .edit_questionList_item, .delete_questionList_item{
 	/* border: solid 1px gray; */
 	cursor: pointer;
+}
+
+.menu{
+	position: fixed;
+	padding: 5px;
+	top: 10px;
+	width: 99vw;
+	height: auto;
+	background-color: #4CAF50;
+	z-index: 10;
 }
 
 .menu button, .wrapper_editing button{
@@ -164,7 +178,7 @@ body,
 
 .head_p{
 	padding: 5px;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 	cursor: pointer;
 }
 
@@ -204,5 +218,37 @@ body,
 }
 
 .wrap_p_work{
-	margin-top: 10px;
+	/* margin-top: 10px; */
+	height: 100vh;
+	overflow: auto;
+	padding-top: 50px;
+	
+}
+
+
+.wrap_p_work_prev{
+	opacity: 0.3;
+	
+	
+}
+.wrapper_work{
+	overflow: auto;
+	/* padding: 20px; */
+}
+
+.wrapper{
+	padding-top: 35px;
+	font-size: 30px;
+}
+
+.wrapper_editing{
+	padding: 10px;
+}
+
+.wrapper_my_question{
+	margin-top: 5px;
+}
+
+.wrapper_button_edit, .wrapperAnswerButton, .wrapper_dinamic{
+	margin-top: 5px;
 }

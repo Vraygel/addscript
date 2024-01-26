@@ -141,10 +141,6 @@ function buttonEventListener() {
     dinamic_list.innerHTML = ''
     // debugger
     dinamicListFunc('dinamic_add', 'Добавить') 
-  
-    
-    
-    
   });
 }
 
