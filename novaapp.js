@@ -38,6 +38,7 @@ let wrap_scriptnam_list = document.querySelector('.wrap_scriptnam_list') // ко
 let wrap_scriptnam_list_p = document.querySelector('.wrap_scriptnam_list_p') // контейнер списка наименований скриптов
 let select_script = document.querySelector('.select_script') // кнопка выбрать скрипт
 let menu = document.querySelector('.menu') // кнопка выбрать скрипт
+let qualification_objection = document.querySelector('.qualification_objection') // контейнер работы с возражениями
 
 
 
@@ -432,6 +433,7 @@ function programming_buttonClick() { // кнопка "програмирован
 	wrapper_work.style.display = 'none'
 	wrapper_list.style.display = 'none'
 	wrap_scriptnam_list.style.display = 'none'
+	qualification_objection.style.display = 'none'
 	lineRemove() // удаление стрелок
 }
 
@@ -445,6 +447,8 @@ function list_buttonClick() { // кнопка "вопросы и ответы" �
 	wrap_scriptnam_list.style.display = 'none'
 	dinamic_div_prog.style.display = 'none'
 	dinamic_div.style.display = 'none'
+	qualification_objection.style.display = 'none'
+	
 
 	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer и получаем его
 	displayingListQuestions(question_answer) // вывод на экран списка всех вопросов
@@ -608,6 +612,7 @@ function work_buttonClick() { // кнопка "Показать скрипт" с
 	wrapper_list.style.display = 'none'
 	wrapper_programming.style.display = 'none'
 	wrap_scriptnam_list.style.display = 'none'
+	qualification_objection.style.display = 'block'
 	lineRemove() // удаление стрелок
 	question_answerArrInlocalStorage() // получаем значение массива вопросов-ответов question_answer
 	
@@ -628,7 +633,70 @@ function work_buttonClick() { // кнопка "Показать скрипт" с
 		// 		`
 	});
 	displayAnswer(question_answer, 1) // отображение вопроса и ответов к нему начиная со стартового вопроса
+	getDinamicInput()
+
+
+
+	
 }
+
+
+
+function getDinamicInput() {
+	// Получаем ссылки на элементы input
+const inputElements = document.querySelectorAll('.dinamic_input');
+
+// Добавляем слушатель события ввода для каждого input
+inputElements.forEach(input => {
+	input.addEventListener('input', handleDinamicInput);
+
+	// При загрузке страницы пытаемся получить ранее сохраненную информацию
+	const savedInfo = localStorage.getItem(`savedInfo_${input.id}`);
+	if (savedInfo) {
+			// Если информация найдена, устанавливаем её в поле ввода
+			input.value = savedInfo;
+	}
+});
+}
+
+
+// Функция обработки события ввода
+function handleDinamicInput(event) {
+
+	const inputElement = event.target;
+	const inputId = inputElement.id;
+
+	// Получаем значение введенной информации
+	const inputValue = inputElement.value;
+	// Проверяем, что значение не пустое
+	if (inputValue.trim() !== '') {
+			// Сохраняем значение в локальном хранилище
+			localStorage.setItem(`savedInfo_${inputId}`, inputValue);
+			console.log(`Информация сохранена для ${inputId}:`, inputValue);
+	} else {
+			console.log(`Введите информацию для ${inputId}.`);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -707,6 +775,7 @@ function nextQuestion() { // функция ожидает клик по отв�
 			let id = event.target.getAttribute('id') // определяем id ответа
 			displayAnswer(question_answer, id) // запускаем функцию отображения вопроса по id ответа
 			scrollToTop()
+			getDinamicInput()
 			})
 		
 			
@@ -788,7 +857,6 @@ function dinamicListFunc(buttonClass, buttonValue) { // отображение �
 			for (const iterator of dinamic_list) { // для каждого dinamic_lista
 				iterator.innerHTML += `
 					<div class='dinamic_list_item'>
-						Системное имя: ${element.name};
 						Подсказка: ${element.placeholder};
 						На странице: <input class="dinamic_input" id="${element.id}" name="${element.name}" type="text" placeholder="${element.placeholder}">
 						<button class="${buttonClass}" id="${element.id}">${buttonValue}</button>
@@ -814,13 +882,13 @@ function dinamic_saveClick() { // кнопка "Сохранить" Динами
 	let name = document.querySelector('input[name="name"]') // ищем input с атрубутом name="name"
 	let placeholder = document.querySelector('input[name="placeholder"]')// ищем input с атрубутом name="placeholder"
 	dinamicListObj.id = id // записываем в объект динамичекого поля id
-	dinamicListObj.name = name.value // записываем в объект динамичекого поля name 
+	// dinamicListObj.name = name.value // записываем в объект динамичекого поля name 
 	dinamicListObj.placeholder = placeholder.value // записываем в объект динамичекого поля placeholder
 	dinamicListArr.push(dinamicListObj) // добавляем в массив динамических полей объект нового динамического поля
 	// let json = JSON.stringify(dinamicListArr) // создаем JSON из массива динамических полей
 	// localStorage.setItem('dinamicListArr', json) // сохраняем в localStorage JSON массива динамических полей
 	saveDinamicListArrToLocalStorage()
-	name.value = '' // очищаем input name
+	// name.value = '' // очищаем input name
 	placeholder.value = '' // очищаем input placeholder
 	dinamicListFunc('dinamic_dell', 'Удалить') // запускаем отображение списка динамических полей с кнопкой удалить
 	dinamicDellFunc() // запускаем функцию удаления динамичеого поля
@@ -1187,13 +1255,11 @@ format_color.addEventListener('click', (e) => {
 	for (const item of mini_but_color) {
 		
 		item.addEventListener('click', (e) => {
-			console.log(item.getAttribute('data-mce-color'));
 			e.preventDefault()
 			var range = window.getSelection().getRangeAt(0);
 			var selectionContents = range.extractContents();
 			var span = document.createElement("span");
 			span.style.color = `${item.getAttribute('data-mce-color')}`;
-			console.log(span);
 			span.appendChild(selectionContents);
 			range.insertNode(span);
 			mceContainer.style.display = 'none';
@@ -1210,8 +1276,29 @@ function scrollToTop() {
 
 	// Прокручиваем страницу к верху указанного div
 	// document.documentElement.scrollTop = wrap_p_work.offsetTop;
-	wrap_p_work.scrollIntoView({ behavior: 'smooth' });
+	try {
+		wrap_p_work.scrollIntoView({ behavior: 'smooth' });
+	} catch (error) {
+		wrapper_work.innerHTML += `
+		<!-- Кнопка для очистки информации -->
+		<button id="clearButton">Очистить информацию</button>
+		`
+		const clearButton = document.getElementById('clearButton');
+		nextQuestion()
+		clearButton.addEventListener('click', clearInformationInputDinamic);
+	}
+
 }
 
+function clearInformationInputDinamic() {
+	const inputElements = document.querySelectorAll('.dinamic_input');
 
+	inputElements.forEach(input => {
+			input.value = ''; // Очищаем значение в инпуте
+			const inputId = input.id;
+			localStorage.removeItem(`savedInfo_${inputId}`); // Удаляем из локального хранилища
+	});
+
+	console.log('Информация очищена.');
+}
 
