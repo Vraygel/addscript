@@ -11,6 +11,10 @@ body,
 	padding: 5px;
 }
 
+.wrapper_programming, .menu{
+	display: none;
+}
+
 .wrapper_work, .wrapper_list, .dinamic_div{
 	display: none;
 }
@@ -24,8 +28,9 @@ body,
 
 .mce-container {
 	position: absolute;
-	top: 25px;
-	left: 0px;
+	top: 40px;
+	left: 40px;
+	font-size: 14px;
 	z-index: 20;
 	border: 1px solid #d6d6d6;
 	display: none;
@@ -94,10 +99,6 @@ body,
 	font-size: 16px;
 	font-family: monospace;
 	border: solid 2px red;
-}
-
-.wrapp_dinamic_add{
-	display: none;
 }
 
 .edit_questionList_item, .delete_questionList_item{
@@ -251,4 +252,13 @@ body,
 
 .wrapper_button_edit, .wrapperAnswerButton, .wrapper_dinamic{
 	margin-top: 5px;
+}
+.wrapper_script_list_p{
+	display: flex;
+	margin-bottom: 10px;
+}
+
+.script_list_p{
+	margin-right: 20px;
+	cursor: pointer;
 }

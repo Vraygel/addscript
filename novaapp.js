@@ -33,12 +33,259 @@ let mceContainer = document.querySelector('.mce-container') // контейне�
 let mini_but_color = document.querySelectorAll('.mini_but_color') // мини кнопка цвета
 let wrapp_dinamic_add = document.querySelector('.wrapp_dinamic_add') // контейнер добавления динамического поля
 // let dinamic_div_prog = document.querySelector('.dinamic_div_prog') // контейнер вставки динамического поля
+let save_script = document.querySelector('.save_script') // кнопка сохранить скрипт
+let wrap_scriptnam_list = document.querySelector('.wrap_scriptnam_list') // контейнер наименований скриптов
+let wrap_scriptnam_list_p = document.querySelector('.wrap_scriptnam_list_p') // контейнер списка наименований скриптов
+let select_script = document.querySelector('.select_script') // кнопка выбрать скрипт
+let menu = document.querySelector('.menu') // кнопка выбрать скрипт
+
+
+
 
 let question_answer = [] // массив содержащий все объекты вопросов и ответов
 let dinamicListArr = [] // массив содержащий все объекты динамических полей
-let answerNoBeginning = [] // массив объектов вопросы без начала
+// let answerNoBeginning = [] // массив объектов вопросы без начала
+// let scriptName = {} // оъект хрянящией названия скприптов
+let scriptsId// переменная содержит id скрипта с которым идет работа
 
-let countsd = 0
+let scripts = [] // массив содержащий все скрипты
+
+
+
+select_script.addEventListener('click', (event) =>{
+	lineRemove()
+	wrap_scriptnam_list_p.style.display = 'block'
+	wrap_scriptnam_list.style.display = 'block'
+	wrapper_work.style.display = 'none'
+	wrapper_programming.style.display = 'none'
+	wrapper_list.style.display = 'none'
+	list_button.style.display = 'none'
+	work_button.style.display = 'none'
+
+	})
+
+
+// localStorage.clear()
+// console.log(localStorage);
+
+
+
+// checkScriptsInLocalStorage()
+
+
+
+outputNameScripts() // отображение наименований скриптов в выпадающем списке
+
+save_script.addEventListener('click', (event) =>{
+	menu.style.display = 'blok'
+	list_button.style.display = 'inline'
+	work_button.style.display = 'inline'
+	wrap_scriptnam_list_p.style.display = 'none'
+	programming_buttonClick()
+	addScript() 
+	})
+
+function addScript() {
+
+	// if (localStorage.getItem('scriptName')) {// если есть сохраненный scriptName
+	// 	let json = localStorage.getItem('scriptName') // получаем JSON scriptName
+	// 	scriptName = JSON.parse(json) // парсим JSON scriptName
+	// 	console.log(scriptName);
+	// }
+
+	// Получаем значения из полей ввода
+	// let systemName = document.querySelector('.script_systemName')
+	
+	let displayName = document.querySelector('.script_displayName')
+
+	// Проверяем, что поле не пустое
+	if (displayName.value) {
+
+		scriptsId = getId()
+
+		let newObjScript = {}
+		newObjScript.idScript = scriptsId,
+			newObjScript.nameScript = displayName.value,
+			// newObjScript.question_answer = [],
+			// newObjScript.dinamicListArr = []
+
+		// if (checkScriptsInLocalStorage()) {
+			
+		// }
+		 // получаем значение массива scripts
+		scripts.push(newObjScript) // добавляем новый объект скрипта в массив scripts
+		// saveScriptsToLocalStorage() // сохраняем в localStorage массив scripts
+
+		question_answer = [] // очищаем массив question_answer
+		question_answerArrSetlocalStorage() // записываем в localStorage пустой массив
+		dinamicListArr = [] // очищаем массив dinamicListArr
+		saveDinamicListArrToLocalStorage() // записываем в localStorage пустой массив
+
+		displayName.value = ''
+		
+		outputNameScripts() // отображение наименований скриптов в выпадающем списке
+	} else {
+		// Если какое-то из полей пусто, выводим предупреждение
+		alert('Пожалуйста, заполните поле.');
+		return
+	}
+}
+
+
+// fruitSelect.addEventListener('change', (event) => outputNameScripts(event))
+
+ function outputNameScripts() { // отображение наименований скриптов в выпадающем списке
+	
+	wrap_scriptnam_list_p.innerHTML = ''
+
+	// checkScriptsInLocalStorage() // получаем значение массива scripts
+	// console.log(scripts);
+	// debugger
+	if (checkScriptsInLocalStorage()) {
+		scripts.forEach(element => {
+			let {idScript, nameScript} = element
+	
+			wrap_scriptnam_list_p.innerHTML +=`
+			<div class="wrapper_script_list_p">
+			<p class="script_list_p" id="${idScript}">${nameScript}</p>
+			<button class="script_list_p_dell" id="${idScript}">Удалить</button>
+			<button class="script_list_p_rename" id="${idScript}">Переименовать</button>
+			</div>
+		 `
+			
+		});
+	}
+	
+	let script_list_p = document.querySelectorAll('.script_list_p') // ищем все параграфы с наименованием скрипта
+	let script_list_p_dell = document.querySelectorAll('.script_list_p_dell') // ищем все кнопки удалить
+	let script_list_p_rename = document.querySelectorAll('.script_list_p_rename') // ищем кнопки переименовать
+	workingWithScriptName(script_list_p, script_list_p_dell, script_list_p_rename)
+ }
+
+function workingWithScriptName(script_list_p, script_list_p_dell, script_list_p_rename) {
+	checkScriptsInLocalStorage()
+	for (const iterator of script_list_p) {
+		iterator.addEventListener('click', (event) =>{
+		let id = iterator.getAttribute('id')
+	
+
+			scriptsId = id
+
+
+			let script = scripts.find(item => item.idScript == id);
+
+			question_answer = script.question_answer
+			dinamicListArr = script.dinamicListArr
+
+			question_answerArrSetlocalStorage() // записываем в localStorage массив question_answer
+			saveDinamicListArrToLocalStorage() // записываем в localStorage массив DinamicListArr
+
+			wrap_scriptnam_list.style.display = 'none'
+			menu.style.display = 'block'
+			list_button.style.display = 'inline'
+			work_button.style.display = 'inline'
+
+			list_buttonClick()
+			})
+	}
+
+	for (const iterator of script_list_p_rename) {
+		iterator.addEventListener('click', (event) =>{
+			
+
+			// console.log(iterator.parentElement.firstElementChild.remove);
+			let parentElement = iterator.parentElement
+			iterator.parentElement.firstElementChild.remove()
+			iterator.className = 'script_list_p_rename_save'
+			iterator.textContent = 'Сохранить'
+{/* <p class="script_list_p" id="${idScript}">${nameScript}</p> */}
+
+			// Создаем новый элемент input
+			const inputElement = document.createElement('input');
+
+			// Вставляем input как первого потомка
+			parentElement.insertBefore(inputElement, parentElement.firstChild);
+
+			// Можно также установить атрибуты, стили и другие свойства для нового input
+			inputElement.setAttribute('type', 'text');
+			inputElement.setAttribute('placeholder', 'Ведите название');
+			iterator.addEventListener('click', (event) =>{
+				if (inputElement.value) {
+					let id = iterator.getAttribute('id')
+					scriptsId = id
+					let script = scripts.find(obj => obj.idScript === id); // Ищем индекс объекта с заданным id
+					script.nameScript = inputElement.value
+					saveScriptsToLocalStorage()
+					let parentElement = iterator.parentElement
+					iterator.parentElement.firstElementChild.remove()
+					let pElement = document.createElement('p');
+					parentElement.insertBefore(pElement, parentElement.firstChild);
+					pElement.setAttribute('id', `${id}`);
+					pElement.setAttribute('class', 'script_list_p');
+					pElement.textContent = inputElement.value
+					iterator.className = 'script_list_p_rename'
+					iterator.textContent = 'Переименовать'
+					location.reload()
+
+				} else {
+					alert('введите новое название скрипта')
+					console.log(inputElement.value)
+				}
+				
+				})
+
+
+			
+			
+			// let index = script.indexOf(2, 2);
+			// let index 
+
+			
+			
+
+			// script.nameScript = 
+			// saveScriptsToLocalStorage()
+			// saveScriptToLocalStorage() 
+			})
+	}
+
+	for (const iterator of script_list_p_dell) {
+		iterator.addEventListener('click', (event) =>{
+			let id = iterator.getAttribute('id')
+			console.log();
+			scriptsId = id
+			checkScriptsInLocalStorage()
+			// let index = script.indexOf(2, 2);
+			// let index 
+
+			
+			let index = scripts.findIndex(obj => obj.idScript === id); // Ищем индекс объекта с заданным id
+
+			// Если объект с заданным id найден, удаляем его из массива
+			if (index !== -1) {
+				scripts.splice(index, 1);
+				console.log(`Объект с id ${id} удален из массива.`);
+			} else {
+				console.log(`Объект с id ${id} не найден в массиве.`);
+			}
+
+
+			saveScriptsToLocalStorage()
+			location.reload()
+			
+
+
+			})
+	}
+}
+
+
+
+
+
+
+
+
 
 head_p.addEventListener('click', (event) => {
 
@@ -173,12 +420,18 @@ function getGuestionsNoParent() {
 	});
 }
 
-programming_button.addEventListener('click', () => programming_buttonClick()) // кнопка "програмирование скрита" событие клик
+// programming_button.addEventListener('click', () => programming_buttonClick()) // кнопка "програмирование скрита" событие клик
 
 function programming_buttonClick() { // кнопка "програмирование скрита" событие клик
+
 	wrapper_programming.style.display = 'block'
+	wrap_scriptnam_list.style.display = 'block'
+	menu.style.display = 'block'
+	// list_button.style.display = 'none'
+	// work_button.style.display = 'none'
 	wrapper_work.style.display = 'none'
 	wrapper_list.style.display = 'none'
+	wrap_scriptnam_list.style.display = 'none'
 	lineRemove() // удаление стрелок
 }
 
@@ -189,6 +442,10 @@ function list_buttonClick() { // кнопка "вопросы и ответы" �
 	wrapper_list.style.display = 'flex'
 	wrapper_work.style.display = 'none'
 	wrapper_programming.style.display = 'none'
+	wrap_scriptnam_list.style.display = 'none'
+	dinamic_div_prog.style.display = 'none'
+	dinamic_div.style.display = 'none'
+
 	question_answerArrInlocalStorage() // проверяем существование сохраненного в localStorage массива question_answer и получаем его
 	displayingListQuestions(question_answer) // вывод на экран списка всех вопросов
 	questionList_itemClick() // событие клик по вопросу из списка вопросов
@@ -276,9 +533,7 @@ function questionList_itemClick() { // событие клик по вопрос
 		for (const iterator of question_answer) {
 			console.log(iterator.answer_all);
 			for (const key in iterator.answer_all) {
-				console.log(iterator.answer_all[key].answer);
-				console.log(iterator.answer_all[key].answer_status);
-				console.log(key);
+
 				let status = iterator.answer_all[key].answer_status
 				let tempP = `<p class="item_answer_list" status='${status}' id="${key}">${iterator.answer_all[key].answer}</p>`
 				addanswer_list.innerHTML += `
@@ -313,7 +568,7 @@ function addquestionList_itemDelete(id) { // запускаем функцию �
 			}
 		}
 	})
-	question_answerArrSetlocalStorage(question_answer) // записываем в localStorage массив question_answer
+	question_answerArrSetlocalStorage() // записываем в localStorage массив question_answer
 	list_buttonClick() // кнопка "вопросы и ответы" событие клик
 }
 
@@ -352,6 +607,7 @@ function work_buttonClick() { // кнопка "Показать скрипт" с
 	wrapper_work.style.display = 'block'
 	wrapper_list.style.display = 'none'
 	wrapper_programming.style.display = 'none'
+	wrap_scriptnam_list.style.display = 'none'
 	lineRemove() // удаление стрелок
 	question_answerArrInlocalStorage() // получаем значение массива вопросов-ответов question_answer
 	
@@ -360,7 +616,7 @@ function work_buttonClick() { // кнопка "Показать скрипт" с
 		if (element.id == 1) {
 			question_answer.splice(index, 1) // вырезаем стартовый вопрос из массива question_answer
 			question_answer.splice(0, 0, rez) // втавляем статовый вопрос на первую позицию
-			question_answerArrSetlocalStorage(question_answer) // сохраняем question_answer
+			question_answerArrSetlocalStorage() // сохраняем question_answer
 		}
 		// wrapper_work.innerHTML += `
 				
@@ -398,7 +654,7 @@ function displayAnswer(question_answer, id) { // отображение вопр
 		// for (const key in iterator) {
 			// console.log(key);
 			// console.log(iterator[key]);
-
+// debugger
 			if (iterator.id == id) { // если id вопроса равно id переданного вопроса
 				// к контейнеру вопросов и ответов добавляем контейнер вопроса
 				wrapper_work.innerHTML += ` 
@@ -561,8 +817,9 @@ function dinamic_saveClick() { // кнопка "Сохранить" Динами
 	dinamicListObj.name = name.value // записываем в объект динамичекого поля name 
 	dinamicListObj.placeholder = placeholder.value // записываем в объект динамичекого поля placeholder
 	dinamicListArr.push(dinamicListObj) // добавляем в массив динамических полей объект нового динамического поля
-	let json = JSON.stringify(dinamicListArr) // создаем JSON из массива динамических полей
-	localStorage.setItem('dinamicListArr', json) // сохраняем в localStorage JSON массива динамических полей
+	// let json = JSON.stringify(dinamicListArr) // создаем JSON из массива динамических полей
+	// localStorage.setItem('dinamicListArr', json) // сохраняем в localStorage JSON массива динамических полей
+	saveDinamicListArrToLocalStorage()
 	name.value = '' // очищаем input name
 	placeholder.value = '' // очищаем input placeholder
 	dinamicListFunc('dinamic_dell', 'Удалить') // запускаем отображение списка динамических полей с кнопкой удалить
@@ -581,8 +838,9 @@ function dinamicDellFunc() { // функция удаления динамиче
 					arr.splice(index, 1) // удаляем этот элемент из массива dinamicListArr
 				}
 			});
-			let json = JSON.stringify(dinamicListArr); // создаем JSON массива dinamicListArr
-			localStorage.setItem('dinamicListArr', json) // записываем JSON массива dinamicListArr в localStorage
+			// let json = JSON.stringify(dinamicListArr); // создаем JSON массива dinamicListArr
+			// localStorage.setItem('dinamicListArr', json) // записываем JSON массива dinamicListArr в localStorage
+			saveDinamicListArrToLocalStorage()
 			dinamicListFunc('dinamic_dell', 'Удалить') // запускаем отображение списка динамических полей с кнопкой удалить
 		})
 	}
@@ -590,6 +848,7 @@ function dinamicDellFunc() { // функция удаления динамиче
 
 addquestion.addEventListener('click', (event) => addquestionClick()) // кнопка готово
 function addquestionClick() {
+	// debugger
 	event.preventDefault()
 	let question = document.querySelector('.question') // ищем текстареа question
 	if (question.value == '') {
@@ -601,13 +860,14 @@ function addquestionClick() {
 		question_answer.forEach((element, index, arr) => { // для каждого объекта (элемента) массива вопросов и ответов
 			if (element.id == id) { // если уже существует такой элемент
 				arr.splice(index, 1) // удаляем этот элемент из массива вопросов и ответов
-				question_answerArrSetlocalStorage(question_answer) // записываем в localStorage массив question_answer
+				question_answerArrSetlocalStorage() // записываем в localStorage массив question_answer
 			}
 		});
 	}
 
 	addQuestionArr(id, question) // добавление нового ответа-вопроса в массив question_answer
 	list_buttonClick() // кнопка "вопросы и ответы" событие клик
+	
 }
 
 addanswer.addEventListener('click', (event) => { // событие клик по кнопке "Добавить ответ"
@@ -656,7 +916,9 @@ function addQuestionArr(id, question) { // добавление нового о�
 	let arr = {} // новый объект вопроса-ответа
 	arr.id = id // устанавливаем id нового объект вопроса-ответа равным id ответа на который задаем вопрос
 	arr.question = question.value // текст вопроса
+	question.value = '' // очищаем поле вопроса
 	arr.questionHTML = myTxtArea_div.innerHTML // HTML версия этого вопроса (визуальное оформление вопроса)
+	myTxtArea_div.innerHTML = '' // очищаем поле визауального оформления фопроса
 	arr.answer_all = {} // новый объект ответов
 	if (answer.length == 0) { // если ответов на вопрос нет
 		arr.answer_all = {}
@@ -673,12 +935,14 @@ function addQuestionArr(id, question) { // добавление нового о�
 			arr.answer_all[id].answer = iterator.value // в объекте нового вопроса указываем текст ответа
 			arr.answer_all[id].answer_status = status // в объекте нового вопроса указываем status этого ответа
 			arr.answer_all[id].idQuestion = idQuestion // id вопроса на который дали этот ответ
+			iterator.value = '' // очищаем поле вопроса
+
 		}
 	}
 	question_answerArrInlocalStorage() // получаем сохраненный в localStorage массива question_answer 
 	question_answer.push(arr) // добавляем в массив question_answer новый объект вопроса-ответа
 	answerTrueFalse(question_answer, id) // устанавливаем ответу на который задали вопрос answer_status равный trye
-	question_answerArrSetlocalStorage(question_answer) // записываем в localStorage массив question_answer
+	question_answerArrSetlocalStorage() // записываем в localStorage массив question_answer
 }
 
 function answerTrueFalse(question_answer, id) { // устанавливаем ответу на который задали вопрос answer_status равный trye
@@ -699,9 +963,67 @@ function dinamicListArrInlocalStorage() { // проверяем существо
 	else {
 		return false
 	}
+
+	
 }
 
-question_answerArrInlocalStorage()
+function saveDinamicListArrToLocalStorage() { // сохранение в локасторадж массива DinamicListArr
+	try {
+			// Преобразовываем переменную в строку JSON
+			const jsonString = JSON.stringify(dinamicListArr);
+			
+			// Сохраняем строку JSON в localStorage под определенным ключом
+			localStorage.setItem('dinamicListArr', jsonString);
+
+			console.log('Переменная успешно сохранена в localStorage.');
+			saveScriptsToLocalStorage()
+
+
+	} catch (error) {
+			console.error('Ошибка при сохранении переменной в localStorage:', error);
+	}
+}
+
+
+
+
+
+function checkScriptsInLocalStorage() { // проверяем существование сохраненного в localStorage объекта scripts
+	// Ваш код для проверки наличия переменной в localStorage
+	// debugger
+
+	if (localStorage.getItem('scripts')) {
+		// scripts = localStorage.getItem('scripts');
+			// Обработка случая, когда переменная scripts найдена в localStorage
+			let json = localStorage.getItem('scripts') // получаем JSON question_answer
+			scripts = JSON.parse(json) // парсим JSON question_answer
+			return true;
+	} else {
+		scripts = []
+			// Обработка случая, когда переменная scripts не найдена в localStorage
+			console.log('Переменная scripts не найдена в localStorage');
+			return false;
+	}
+}
+
+function saveScriptsToLocalStorage() {
+	// debugger
+	// Ваш код для сохранения переменной в localStorage
+	if (scripts) {
+		let script = scripts.find(item => item.idScript == scriptsId);
+		// console.log(question_answer);
+		if (script) {
+			script.question_answer = question_answer
+				script.dinamicListArr = dinamicListArr
+		}
+		
+	}
+
+	
+	let json = JSON.stringify(scripts) // создаем JSON объекта scripts
+	localStorage.setItem('scripts', json);
+	console.log('Переменная scripts сохранена в localStorage:', scripts);
+}
 
 function question_answerArrInlocalStorage() { // проверяем существование сохраненного в localStorage массива question_answer
 	if (localStorage.getItem('question_answer')) {// если есть сохраненный question_answer
@@ -713,19 +1035,57 @@ function question_answerArrInlocalStorage() { // проверяем сущест
 	}
 }
 
-function question_answerArrSetlocalStorage(question_answer) // записываем в localStorage массив question_answer
-{
+function question_answerArrSetlocalStorage() { // записываем в localStorage массив question_answer
+	
+
 	let json = JSON.stringify(question_answer) // создаем JSON массива question_answer
 	localStorage.setItem('question_answer', json) // записываем JSON массива question_answer в localStorage
+
+	saveScriptsToLocalStorage()
 }
 
 function getId(length = 16) { // генерация случайного номера ID
-	let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	let res = '';
-	for (let i = 0; i < length; i++) {
-		res += chars[Math.floor(Math.random() * chars.length)];
+	// Получаем текущий временной момент в виде строки
+	let timestamp = Date.now().toString();
+
+	// Генерируем случайные цифры
+	let randomDigits = '';
+	for (let i = 0; i < timestamp.length; i++) {
+		randomDigits += Math.floor(Math.random() * 100).toString();
 	}
-	return res;
+
+	// Умножаем каждую цифру временной метки на соответствующую случайную цифру
+	let multipliedTimestamp = '';
+	for (let i = 0; i < timestamp.length; i++) {
+		multipliedTimestamp += (parseInt(timestamp[i]) * parseInt(randomDigits[i])).toString();
+	}
+
+	// Получаем случайные 12 символов
+	const multiplied = Array.from({ length: 12 }, () => multipliedTimestamp[Math.floor(Math.random() * multipliedTimestamp.length)]).join('');
+
+	// Разбиваем на массив по два символа
+	let splitTimestamp = multiplied.match(/.{1}/g);
+
+	// Генерируем случайные символы
+	let randomChars = '';
+	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < 24; i++) {
+		randomChars += characters.charAt(Math.floor(Math.random() * characters.length));
+	}
+
+	// Разбиваем случайные символы на массив по два символа
+	let splitRandomChars = randomChars.match(/.{1,2}/g);
+
+	// Объединяем массивы временной метки и случайных символов
+	let mergedArray = splitRandomChars.map((v, i) => v + (splitTimestamp[i] || ""));
+
+	// Перемешиваем объединенный массив
+	let shuffledMergedArray = mergedArray.sort(() => Math.random() - 0.5).join('');
+
+	// Разбиваем массив по девять символов и объединяем их через дефис
+	const result = shuffledMergedArray.match(/.{1,9}/g).join('-');
+
+	return result;
 }
 
 function dragGableGo() {
@@ -764,7 +1124,6 @@ function dragGableGo() {
 	for (const iterator of dropArea) {
 		iterator.addEventListener('drop', function (event) {
 			try {
-				event.target
 				let id = event.target.childNodes[1].getAttribute('id')
 				let count = question_answer.findIndex(item => {
 					if (item.id == id) {
@@ -780,7 +1139,7 @@ function dragGableGo() {
 				alert('Что-то пошло не так. Пожалуйста попробуйте снова')
 				list_buttonClick()
 			}
-			question_answerArrSetlocalStorage(question_answer)
+			question_answerArrSetlocalStorage()
 			list_buttonClick()
 			event.preventDefault();
 			// Удаляем класс после завершения бросания
@@ -789,12 +1148,7 @@ function dragGableGo() {
 	}
 }
 
-question_answerArrInlocalStorage()
-
- 
-
- 
- format_em.addEventListener("click", (e) => {
+format_em.addEventListener("click", (e) => {
 	e.preventDefault()
 	var range = window.getSelection().getRangeAt(0);
 	var selectionContents = range.extractContents();
@@ -831,6 +1185,7 @@ format_color.addEventListener('click', (e) => {
 	textArea.value = `${prefix}${inserted}${suffix}`;
 
 	for (const item of mini_but_color) {
+		
 		item.addEventListener('click', (e) => {
 			console.log(item.getAttribute('data-mce-color'));
 			e.preventDefault()
@@ -860,4 +1215,3 @@ function scrollToTop() {
 
 
 
-// localStorage.clear()
